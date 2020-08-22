@@ -131,7 +131,7 @@ const Dashboard: React.FC = () => {
 
   const nextAppointment = useMemo(() => {
     return appointments.find(appointment => {
-      isAfter(parseISO(appointment.date), new Date());
+      return isAfter(parseISO(appointment.date), new Date());
     });
   }, [appointments]);
 
@@ -141,10 +141,7 @@ const Dashboard: React.FC = () => {
         <HeaderContent>
           <img src={logoImg} alt="GoBarber" />
           <Profile>
-            <img
-              src={user.avatar_url}
-              alt={user.name}
-            />
+            <img src={user.avatar_url} alt={user.name} />
             <div>
               <span>Bem-vindo,</span>
               <Link to="/profile">

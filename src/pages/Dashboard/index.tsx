@@ -154,7 +154,9 @@ const Dashboard: React.FC = () => {
           </button>
         </HeaderContent>
       </Header>
-      <Content />
+      <Content>
+        <h1>...</h1>
+      </Content>
     </Container>
   );
 };

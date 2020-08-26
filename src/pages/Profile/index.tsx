@@ -25,7 +25,6 @@ const Profile: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
   const { user, updateUser } = useAuth();
-
   const handleAvatarChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {

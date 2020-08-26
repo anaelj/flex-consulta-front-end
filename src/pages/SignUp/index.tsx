@@ -9,8 +9,8 @@ import { Container, Content, Background, AnimationContainer } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
-import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
+import api from '../../services/api';
 
 interface SignUpFormData {
   name: string;

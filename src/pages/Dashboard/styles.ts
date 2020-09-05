@@ -71,6 +71,11 @@ export const ContentLeft = styled.main`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media (max-width: 800px) {
+    flex-direction: line;
+    position: relative;
+  }
 `;
 export const ContentRight = styled.main`
   margin: 5px auto;

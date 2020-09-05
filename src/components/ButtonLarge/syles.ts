@@ -14,6 +14,11 @@ export const Container = styled.button`
   font-size: 24px;
   transition: background-color 0.2s;
 
+  @media (max-width: 800px) {
+    flex-direction: line;
+    position: relative;
+  }
+
   &:hover {
     background: ${shade(0.2, '#28262e')};
   }

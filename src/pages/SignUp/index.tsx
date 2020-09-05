@@ -11,6 +11,7 @@ import getValidationErrors from '../../utils/getValidationErros';
 import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
 import Select from '../../components/Select';
+import Dashboard from '../Dashboard';
 
 interface SignUpFormData {
   name: string;
@@ -74,39 +75,32 @@ const SignUp: React.FC = () => {
     [addToast, history],
   );
   return (
-    <Container>
-      <Content>
-        <AnimationContainer>
-          <Form ref={formRef} onSubmit={handleSubmit}>
-            <h1>Cadastro de Usuários</h1>
-            <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
-            <Input
-              name="email"
-              icon={FiMail}
-              placeholder="E-mail"
-              type="text"
-            />
+    <Dashboard>
+      <AnimationContainer>
+        <Form ref={formRef} onSubmit={handleSubmit}>
+          <h1>Cadastro de Usuários</h1>
+          <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
+          <Input name="email" icon={FiMail} placeholder="E-mail" type="text" />
 
-            <Select
-              name="transportadora_id"
-              placeholder="Transportadora"
-              options={options}
-              isMulti={false}
-              icon={FiHome}
-            />
+          <Select
+            name="transportadora_id"
+            placeholder="Transportadora"
+            options={options}
+            isMulti={false}
+            icon={FiHome}
+          />
 
-            <Input
-              name="password"
-              icon={FiLock}
-              type="password"
-              placeholder="Senha"
-            />
+          <Input
+            name="password"
+            icon={FiLock}
+            type="password"
+            placeholder="Senha"
+          />
 
-            <Button type="submit">Cadastrar</Button>
-          </Form>
-        </AnimationContainer>
-      </Content>
-    </Container>
+          <Button type="submit">Cadastrar</Button>
+        </Form>
+      </AnimationContainer>
+    </Dashboard>
   );
 };
 

@@ -32,7 +32,7 @@ interface Appointments {
   };
 }
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC = ({ children }) => {
   const { signOut, user } = useAuth();
   const history = useHistory();
   return (
@@ -65,9 +65,7 @@ const Dashboard: React.FC = () => {
             <span>Transportadoras</span>
           </ButtonLarge>
         </ContentLeft>
-        <ContentRight>
-          <h1>...</h1>
-        </ContentRight>
+        <ContentRight>{children}</ContentRight>
       </Content>
     </Container>
   );

@@ -62,9 +62,21 @@ export const Profile = styled.div`
 
 export const Content = styled.main`
   max-width: 1120px;
-  margin: 64px auto;
+  margin: 5px auto;
   display: flex;
 `;
+export const ContentLeft = styled.main`
+  max-width: 300px;
+  margin: 5px -50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+export const ContentRight = styled.main`
+  margin: 5px auto;
+  display: flex;
+`;
+
 export const Schedule = styled.div`
   flex: 1;
   margin-right: 120px;

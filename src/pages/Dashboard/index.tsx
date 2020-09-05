@@ -1,12 +1,21 @@
 import React from 'react';
 import { FiPower } from 'react-icons/fi';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import 'react-day-picker/lib/style.css';
 
-import { Container, Header, Profile, HeaderContent, Content } from './styles';
+import {
+  Container,
+  Header,
+  Profile,
+  HeaderContent,
+  Content,
+  ContentLeft,
+  ContentRight,
+} from './styles';
 import { useAuth } from '../../hooks/auth';
+import ButtonLarge from '../../components/ButtonLarge';
 
 interface MonthAvailabilityItem {
   day: number;
@@ -25,7 +34,7 @@ interface Appointments {
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
-
+  const history = useHistory();
   return (
     <Container>
       <Header>
@@ -46,7 +55,19 @@ const Dashboard: React.FC = () => {
         </HeaderContent>
       </Header>
       <Content>
-        <h1>...</h1>
+        <ContentLeft>
+          <ButtonLarge>Consulta Viagen</ButtonLarge>
+          <ButtonLarge onClick={() => history.push('/signup')}>
+            Cadastro de Usuários
+          </ButtonLarge>
+          <ButtonLarge>Autorização de Transportadoras</ButtonLarge>
+          <ButtonLarge onClick={() => history.push('/transportadoras')}>
+            <span>Transportadoras</span>
+          </ButtonLarge>
+        </ContentLeft>
+        <ContentRight>
+          <h1>...</h1>
+        </ContentRight>
       </Content>
     </Container>
   );

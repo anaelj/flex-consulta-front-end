@@ -1,23 +1,15 @@
-import React, { useCallback, useRef, ChangeEvent } from 'react';
-import {
-  FiMail,
-  FiUser,
-  FiLock,
-  FiCamera,
-  FiArrowLeft,
-  FiPhone,
-} from 'react-icons/fi';
+import React, { useCallback, useRef } from 'react';
+import { FiMail, FiUser, FiArrowLeft, FiPhone } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory, Link } from 'react-router-dom';
-import { Container, Content, AvatarInput } from './styles';
+import { Container, Content } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
 import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
-import { useAuth } from '../../hooks/auth';
 
 interface ITransportadoraFormData {
   name: string;
@@ -30,8 +22,6 @@ const Profile: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
-  const { user } = useAuth();
-
   const handleSubmit = useCallback(
     async (data: ITransportadoraFormData) => {
       try {

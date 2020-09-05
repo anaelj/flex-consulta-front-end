@@ -2,10 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FiAlertCircle } from 'react-icons/fi';
 
-import ReactSelect, {
-  OptionTypeBase,
-  Props as SelectProps,
-} from 'react-select';
+import { OptionTypeBase, Props as SelectProps } from 'react-select';
 
 import { useField } from '@unform/core';
 import { Container, Error, CustomSelect } from './styles';

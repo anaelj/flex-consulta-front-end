@@ -1,10 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { FiMail, FiUser, FiLock, FiHome } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-import { Container, Content, AnimationContainer } from './styles';
+import { AnimationContainer } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
@@ -20,16 +20,47 @@ interface SignUpFormData {
   transportadora_id: string;
 }
 
+interface ITransportadoras {
+  transportadora_id: string;
+  name: string;
+}
+
+interface ISelectOptions {
+  value: string;
+  label: string;
+}
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
+  const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
 
-  const options = [
-    { value: '6c2a6b78-c87d-4141-8863-e4ec5cae0748', label: 'luis transp' },
-    { value: '607b1fcf-4ab4-44ab-9474-12b5424a4c88', label: 'anael transp' },
-    { value: '172e5dcf-e99f-49ed-b9cb-bee53761b1da', label: 'tteste 2' },
-  ];
+  // 172e5dcf-e99f-49ed-b9cb-bee53761b1da
+
+  useEffect(() => {
+    api
+      .get<ITransportadoras[]>(
+        '/transportadoras/172e5dcf-e99f-49ed-b9cb-bee53761b1da',
+      )
+      .then(response => {
+        const temp = response.data.map(transportadora => {
+          return {
+            value: transportadora.transportadora_id,
+            label: transportadora.name,
+          };
+        });
+
+        setTransportadoras(temp);
+        //        console.log(temp);
+      });
+  }, []);
+
+  // const options = [
+  //   { value: '6c2a6b78-c87d-4141-8863-e4ec5cae0748', label: 'luis transp' },
+  //   { value: '607b1fcf-4ab4-44ab-9474-12b5424a4c88', label: 'anael transp' },
+  //   { value: '172e5dcf-e99f-49ed-b9cb-bee53761b1da', label: 'tteste 2' },
+  // ];
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -46,7 +77,7 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        console.log(data);
+        // console.log(data);
 
         await api.post('/users', data);
 
@@ -80,12 +111,18 @@ const SignUp: React.FC = () => {
         <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>Cadastro de Usuários</h1>
           <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
-          <Input name="email" icon={FiMail} placeholder="E-mail" type="text" />
+          <Input
+            name="email"
+            icon={FiMail}
+            placeholder="E-mail"
+            type="text"
+            autoComplete="false"
+          />
 
           <Select
             name="transportadora_id"
             placeholder="Transportadora"
-            options={options}
+            options={transportadoras}
             isMulti={false}
             icon={FiHome}
           />

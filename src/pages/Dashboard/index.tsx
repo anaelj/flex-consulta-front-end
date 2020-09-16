@@ -56,7 +56,7 @@ const Dashboard: React.FC = ({ children }) => {
       </Header>
       <Content>
         <ContentLeft>
-          <ButtonLarge>Consulta Viagen</ButtonLarge>
+          <ButtonLarge>Consulta Viagens</ButtonLarge>
           <ButtonLarge onClick={() => history.push('/signup')}>
             Cadastro de Usuários
           </ButtonLarge>

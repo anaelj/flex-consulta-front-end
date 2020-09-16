@@ -160,7 +160,7 @@ const Profile: React.FC = () => {
             name="password"
             icon={FiLock}
             type="password"
-            placeholder="COnfirmar Senha"
+            placeholder="Confirmar Senha"
           />
 
           <Button type="submit">Salvar</Button>

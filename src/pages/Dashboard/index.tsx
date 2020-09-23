@@ -61,7 +61,7 @@ const Dashboard: React.FC = ({ children }) => {
             Cadastro de Usuários
           </ButtonLarge>
           <ButtonLarge>Autorização de Transportadoras</ButtonLarge>
-          <ButtonLarge onClick={() => history.push('/transportadoras')}>
+          <ButtonLarge onClick={() => history.push('/pesquisatransportadora')}>
             <span>Transportadoras</span>
           </ButtonLarge>
         </ContentLeft>

@@ -103,3 +103,22 @@ export const AvatarInput = styled.div`
     }
   }
 `;
+
+export const Griddle = styled.div`
+  table {
+    width: 100%;
+    table-layout: fixed;
+  }
+  griddle-settings-toggle {
+    float: left;
+    width: 50%;
+    text-align: right;
+  }
+  th {
+    background-color: #ededef;
+    border: 0px;
+    border-bottom: 1px solid #ddd;
+    color: #222;
+    padding: 5px;
+  }
+`;

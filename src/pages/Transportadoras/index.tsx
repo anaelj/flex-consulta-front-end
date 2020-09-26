@@ -3,7 +3,8 @@ import { FiMail, FiUser, FiPhone } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { isUuid } from 'uuidv4';
 import { Container, Content } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -21,6 +22,15 @@ interface ITransportadoraFormData {
 }
 
 const Transportadora: React.FC = () => {
+  const { id } = useParams();
+
+  if (isUuid(id)) {
+    console.log('a valid uuid');
+    // parei aqui, nessa parte que precisa fazer requisição a api para buscar os dados e preencher o form
+  }
+
+  console.log(id);
+
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();

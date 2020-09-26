@@ -61,64 +61,79 @@ export const Content = styled.div`
   }
 `;
 
-export const AvatarInput = styled.div`
-  margin-bottom: 32px;
-  position: relative;
-  align-self: center;
-
-  img {
-    width: 186px;
-    height: 186px;
-    border-radius: 50%;
+export const Lista = styled.div`
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    list-style: none;
   }
 
-  label {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    background: #ff9000;
-    border-radius: 50%;
-    right: 0;
-    bottom: 0;
-    border: 0;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  .items-grid li {
+    background: #f5f5f5;
+    border: 2px solid #f5f5f5;
+    height: 180px;
+    border-radius: 8px;
+    padding: 32px 24px 16px;
 
-    input {
-      display: none;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    text-align: center;
+
+    cursor: pointer;
+  }
+
+  .items-grid li span {
+    flex: 1;
+    margin-top: 12px;
 
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    svg {
-      width: 20px;
-      height: 20px;
-      color: #312e38;
-    }
-
-    &:hover {
-      background: ${shade(0.2, '#ff9000')};
-    }
+    color: var(--title-color);
   }
-`;
 
-export const Griddle = styled.div`
-  table {
-    width: 100%;
-    table-layout: fixed;
+  .items-grid li.selected {
+    background: #e1faec;
+    border: 2px solid #34cb79;
   }
-  griddle-settings-toggle {
-    float: left;
-    width: 50%;
-    text-align: right;
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    list-style: none;
   }
-  th {
-    background-color: #ededef;
-    border: 0px;
-    border-bottom: 1px solid #ddd;
-    color: #222;
-    padding: 5px;
+
+  .items-grid li {
+    background: #232129;
+    border: 2px solid #ff9000;
+    height: 180px;
+    border-radius: 8px;
+    padding: 32px 24px 16px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    text-align: center;
+
+    cursor: pointer;
+  }
+
+  .items-grid li span {
+    flex: 1;
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+    color: var(--title-color);
+  }
+
+  .items-grid li.selected {
+    background: #e1faec;
+    border: 2px solid #34cb79;
   }
 `;

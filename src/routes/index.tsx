@@ -7,8 +7,8 @@ import Dashboard from '../pages/Dashboard';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import Profile from '../pages/Profile';
-// import Transportadoras from '../pages/Transportadoras';
 import PesquisaTransportadora from '../pages/PesquisaTransportadora';
+import Transportadora from '../pages/Transportadoras';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -19,6 +19,12 @@ const Routes: React.FC = () => (
     <Route path="/signup" exact component={SignUp} isPrivate />
     <Route path="/dashboard" exact component={Dashboard} isPrivate />
     <Route path="/profile" exact component={Profile} isPrivate />
+    <Route
+      path="/transportadoras/:id"
+      exact
+      component={Transportadora}
+      isPrivate
+    />
     <Route
       path="/pesquisatransportadora"
       exact

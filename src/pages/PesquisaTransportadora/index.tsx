@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from 'react';
-// import Griddle from 'griddle-react';
-import Griddle from 'griddle-react';
-import { Container, Content } from './styles';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  ChangeEvent,
+} from 'react';
+import { FiSearch } from 'react-icons/fi';
+import { Form } from '@unform/web';
+import { FormHandles } from '@unform/core';
+import { useHistory } from 'react-router-dom';
+import { Container, Content, Lista } from './styles';
 import api from '../../services/api';
+import Input from '../../components/Input';
 
 interface ITransportadoraFormData {
   name: string;
@@ -12,16 +21,22 @@ interface ITransportadoraFormData {
 }
 
 interface ITransportadoras {
-  transportadora_id: string;
+  id: string;
   name: string;
+  avatar_url: string;
 }
 
-interface IGridData {
-  name: string;
+interface IPesquisaData {
+  textoDigitado: string;
 }
 
 const Profile: React.FC = () => {
-  const [transportadoras, setTransportadoras] = useState<IGridData[]>([]);
+  const [transportadoras, setTransportadoras] = useState<ITransportadoras[]>(
+    [],
+  );
+  const formRef = useRef<FormHandles>(null);
+  const [textoDigitado, setTextDigitado] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     api
@@ -32,17 +47,70 @@ const Profile: React.FC = () => {
         const temp = response.data.map(transportadora => {
           return {
             name: transportadora.name,
+            id: transportadora.id,
+            avatar_url: transportadora.avatar_url,
           };
         });
-
-        setTransportadoras(temp);
-        //        console.log(temp);
+        // filtrar aqui textoDigitado
+        setTransportadoras(
+          temp.filter(item => item.name.includes(textoDigitado)),
+        );
+        //        console.log(transportadoras);
+        //        console.log(textoDigitado);
       });
+  }, [textoDigitado]);
+
+  const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setTextDigitado(event.target.value);
   }, []);
+
+  const handleOpenTransportadora = useCallback(
+    (id: string) => {
+      history.push(`/transportadoras/${id}`);
+      //      console.log(`/transporadoras/${id}`);
+    },
+    [history],
+  );
 
   return (
     <Container>
-      <Griddle data={transportadoras} />
+      <Content>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <Form
+          ref={formRef}
+          onSubmit={() => {
+            alert('teste');
+          }}
+        >
+          <h1>Transportadora</h1>
+
+          <Input
+            name="name"
+            icon={FiSearch}
+            placeholder="Pesquise por nome"
+            type="text"
+            onChange={handlePesquisa}
+          />
+          <Lista>
+            <ul className="items-grid">
+              {transportadoras.map(transportadora => (
+                <li
+                  key={transportadora.id}
+                  onClick={() => handleOpenTransportadora(transportadora.id)}
+                >
+                  <img src={transportadora.avatar_url} alt="" />
+
+                  {transportadora.name}
+                </li>
+              ))}
+            </ul>
+          </Lista>
+        </Form>
+      </Content>
     </Container>
   );
 };

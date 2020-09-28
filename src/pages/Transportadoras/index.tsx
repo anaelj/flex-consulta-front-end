@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { FiMail, FiUser, FiPhone } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -23,15 +23,28 @@ interface ITransportadoraFormData {
 
 const Transportadora: React.FC = () => {
   const { id } = useParams();
-
-  if (isUuid(id)) {
-    console.log('a valid uuid');
-    // parei aqui, nessa parte que precisa fazer requisição a api para buscar os dados e preencher o form
-  }
-
-  console.log(id);
-
   const formRef = useRef<FormHandles>(null);
+
+  useEffect(() => {
+    if (isUuid(id)) {
+      api
+        .get<ITransportadoraFormData>(`/transportadoras/show/${id}`)
+        .then(response => {
+          formRef.current?.setData({
+            name: response.data.name,
+            email: response.data.email,
+            contato: response.data.contato,
+            telefone: response.data.telefone,
+          });
+
+          //        console.log(textoDigitado);
+        });
+    }
+  }, [id]);
+  // parei aqui, nessa parte que precisa fazer requisição a api para buscar os dados e preencher o form
+
+  // console.log(id);
+
   const { addToast } = useToast();
   const history = useHistory();
   const handleSubmit = useCallback(
@@ -57,7 +70,7 @@ const Transportadora: React.FC = () => {
           telefone: data.telefone,
         };
 
-        await api.post('/transportadoras', formData);
+        await api.put('/transportadoras', formData);
 
         history.push('/dashboard');
 

@@ -5,13 +5,16 @@ import React, {
   useRef,
   ChangeEvent,
 } from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiFilePlus } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import { useHistory } from 'react-router-dom';
-import { Container, Content, Lista } from './styles';
+import { Container, Content, Lista, InputPesquisa } from './styles';
 import api from '../../services/api';
 import Input from '../../components/Input';
+import Dashboard from '../Dashboard';
+import { AnimationContainer } from '../SignIn/styles';
+import Button from '../../components/Button';
 
 interface ITransportadoraFormData {
   name: string;
@@ -48,14 +51,16 @@ const Profile: React.FC = () => {
           return {
             name: transportadora.name,
             id: transportadora.id,
-            avatar_url: transportadora.avatar_url,
+            avatar_url: transportadora.avatar_url
+              ? transportadora.avatar_url
+              : 'https://www.flexconsulta.com.br/static/media/sign-in-background.d20fefa2.png',
           };
         });
         // filtrar aqui textoDigitado
         setTransportadoras(
           temp.filter(item => item.name.includes(textoDigitado)),
         );
-        //        console.log(transportadoras);
+        console.log(transportadoras);
         //        console.log(textoDigitado);
       });
   }, [textoDigitado]);
@@ -73,45 +78,47 @@ const Profile: React.FC = () => {
   );
 
   return (
-    <Container>
-      <Content>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <Form
-          ref={formRef}
-          onSubmit={() => {
-            alert('teste');
-          }}
-        >
-          <h1>Transportadora</h1>
+    <Dashboard>
+      <Container>
+        <Content>
+          <AnimationContainer>
+            <Form ref={formRef} onSubmit={() => {}}>
+              <h1>Transportadora</h1>
 
-          <Input
-            name="name"
-            icon={FiSearch}
-            placeholder="Pesquise por nome"
-            type="text"
-            onChange={handlePesquisa}
-          />
-          <Lista>
-            <ul className="items-grid">
-              {transportadoras.map(transportadora => (
-                <li
-                  key={transportadora.id}
-                  onClick={() => handleOpenTransportadora(transportadora.id)}
-                >
-                  <img src={transportadora.avatar_url} alt="" />
+              <InputPesquisa>
+                <Input
+                  name="name"
+                  icon={FiSearch}
+                  placeholder="Pesquise por nome"
+                  type="text"
+                  onChange={handlePesquisa}
+                />
+                <Button onClick={() => history.push('/transportadoras/new')}>
+                  <FiFilePlus color="#03b0ef" size="25px" />
+                </Button>
+              </InputPesquisa>
 
-                  {transportadora.name}
-                </li>
-              ))}
-            </ul>
-          </Lista>
-        </Form>
-      </Content>
-    </Container>
+              <Lista>
+                <ul className="items-grid">
+                  {transportadoras.map(transportadora => (
+                    <li
+                      key={transportadora.id}
+                      onClick={() =>
+                        handleOpenTransportadora(transportadora.id)
+                      }
+                    >
+                      <img src={transportadora.avatar_url} alt="" />
+
+                      {transportadora.name}
+                    </li>
+                  ))}
+                </ul>
+              </Lista>
+            </Form>
+          </AnimationContainer>
+        </Content>
+      </Container>
+    </Dashboard>
   );
 };
 

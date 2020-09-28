@@ -70,7 +70,7 @@ const Transportadora: React.FC = () => {
           telefone: data.telefone,
         };
 
-        await api.put('/transportadoras', formData);
+        await api.post('/transportadoras', formData);
 
         history.push('/dashboard');
 

@@ -63,7 +63,7 @@ const Profile: React.FC = () => {
         console.log(transportadoras);
         //        console.log(textoDigitado);
       });
-  }, [textoDigitado]);
+  }, [textoDigitado, transportadoras]);
 
   const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setTextDigitado(event.target.value);

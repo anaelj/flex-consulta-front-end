@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useEffect } from 'react';
-import { FiMail, FiUser, FiPhone } from 'react-icons/fi';
+import React, { useCallback, useRef, useEffect , ChangeEvent, useState} from 'react';
+import { FiMail, FiUser, FiPhone, FiCamera } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -13,17 +13,27 @@ import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
 import { AnimationContainer } from '../SignIn/styles';
 import Dashboard from '../Dashboard';
+import { AvatarInput } from '../Profile/styles';
 
 interface ITransportadoraFormData {
   name: string;
   email: string;
   contato: string;
   telefone: string;
+  avatar_url: string;
+}
+
+interface ITransportadora {
+  name: string;
+  avatar_url: string;
 }
 
 const Transportadora: React.FC = () => {
   const { id } = useParams();
   const formRef = useRef<FormHandles>(null);
+  
+  const [transportadora, setTransportadora] = useState<ITransportadora>(  );
+  //const [avatar_url, setAvatarUrl] = useState();
 
   useEffect(() => {
     if (isUuid(id)) {
@@ -35,18 +45,45 @@ const Transportadora: React.FC = () => {
             email: response.data.email,
             contato: response.data.contato,
             telefone: response.data.telefone,
+            avatar_url: response.data.avatar_url
           });
-
+          setTransportadora(
+            {
+              name: response.data.name,
+              avatar_url: response.data.avatar_url
+            }
+          );          
           //        console.log(textoDigitado);
         });
     }
-  }, [id]);
-  // parei aqui, nessa parte que precisa fazer requisição a api para buscar os dados e preencher o form
-
+  }, [id, transportadora]);
   // console.log(id);
 
   const { addToast } = useToast();
   const history = useHistory();
+
+  const handleAvatarChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const data = new FormData();
+
+        data.append('avatar', e.target.files[0]);
+
+        api.patch(`/transportadoras/avatar/id=${id}`, data).then(response => {
+          addToast({
+            type: 'success',
+            title: 'Avatar atualizado!',
+          });
+
+          setTransportadora (response.data   );          
+        });
+        // console.log(e.target.files[0]);
+      }
+    },
+    [addToast]
+  );
+
+
   const handleSubmit = useCallback(
     async (data: ITransportadoraFormData) => {
       try {
@@ -102,6 +139,19 @@ const Transportadora: React.FC = () => {
         <Content>
           <AnimationContainer>
             <Form ref={formRef} onSubmit={handleSubmit}>
+            <AvatarInput>
+            <img src={transportadora?.avatar_url} alt="" />
+            <label htmlFor="avatar">
+              <FiCamera />
+              <input
+                type="file"
+                name="avatar"
+                id="avatar"
+                onChange={handleAvatarChange}
+              />
+            </label>
+          </AvatarInput>
+
               <h1>Transportadora</h1>
 
               <Input name="name" icon={FiUser} placeholder="Nome" type="text" />

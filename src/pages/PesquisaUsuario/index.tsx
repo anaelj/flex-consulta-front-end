@@ -36,10 +36,9 @@ const PesquisaUsuario: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const [textoDigitado, setTextDigitado] = useState('');
   const history = useHistory();
-
   useEffect(() => {
     api
-      .get<IUsuarios[]>('/profiles/172e5dcf-e99f-49ed-b9cb-bee53761b1da')
+      .get<IUsuarios[]>('/users/172e5dcf-e99f-49ed-b9cb-bee53761b1da')
       .then(response => {
         const temp = response.data.map(usuario => {
           return {
@@ -55,7 +54,11 @@ const PesquisaUsuario: React.FC = () => {
         // console.log(Usuarios);
         //        console.log(textoDigitado);
       });
+
+    
   }, [textoDigitado]);
+
+  
 
   const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setTextDigitado(event.target.value);
@@ -63,7 +66,7 @@ const PesquisaUsuario: React.FC = () => {
 
   const handleOpenUsuario = useCallback(
     (id: string) => {
-      history.push(`/usuarios/${id}`);
+      history.push(`/signup/${id}`);
     },
     [history],
   );

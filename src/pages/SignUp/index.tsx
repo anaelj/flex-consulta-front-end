@@ -35,13 +35,29 @@ const SignUp: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
-
+  const { id } = useParams();      if (isUuid(id)) {
+    api
+      .get<ITransportadoraFormData>(`/transportadoras/show/${id}`)
+      .then(response => {
+        formRef.current?.setData({
+          name: response.data.name,
+          email: response.data.email,
+          contato: response.data.contato,
+          telefone: response.data.telefone,
+          avatar_url: response.data.avatar_url,
+        });
+        setTransportadora({
+          name: response.data.name,
+          avatar_url: response.data.avatar_url,
+        });
+      });
+  }
   // 172e5dcf-e99f-49ed-b9cb-bee53761b1da
 
-  useEffect(() => {
+
     api
-      .get<ITransportadoras[]>(
-        '/transportadoras/172e5dcf-e99f-49ed-b9cb-bee53761b1da',
+      .get<SignUpFormData[]>(
+        '/users/172e5dcf-e99f-49ed-b9cb-bee53761b1da',
       )
       .then(response => {
         const temp = response.data.map(transportadora => {
@@ -54,6 +70,8 @@ const SignUp: React.FC = () => {
         setTransportadoras(temp);
         //        console.log(temp);
       });
+
+      
   }, []);
 
   // const options = [

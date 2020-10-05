@@ -1,4 +1,10 @@
-import React, { useCallback, useRef, useEffect , ChangeEvent, useState} from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  useState,
+} from 'react';
 import { FiMail, FiUser, FiPhone, FiCamera } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -31,9 +37,9 @@ interface ITransportadora {
 const Transportadora: React.FC = () => {
   const { id } = useParams();
   const formRef = useRef<FormHandles>(null);
-  
-  const [transportadora, setTransportadora] = useState<ITransportadora>(  );
-  //const [avatar_url, setAvatarUrl] = useState();
+
+  const [transportadora, setTransportadora] = useState<ITransportadora>();
+  // const [avatar_url, setAvatarUrl] = useState();
 
   useEffect(() => {
     if (isUuid(id)) {
@@ -45,19 +51,16 @@ const Transportadora: React.FC = () => {
             email: response.data.email,
             contato: response.data.contato,
             telefone: response.data.telefone,
-            avatar_url: response.data.avatar_url
+            avatar_url: response.data.avatar_url,
           });
-          setTransportadora(
-            {
-              name: response.data.name,
-              avatar_url: response.data.avatar_url
-            }
-          );          
-          //        console.log(textoDigitado);
+          setTransportadora({
+            name: response.data.name,
+            avatar_url: response.data.avatar_url,
+          });
         });
     }
-  }, [id, transportadora]);
-  // console.log(id);
+    //    console.log(id);
+  }, [id]);
 
   const { addToast } = useToast();
   const history = useHistory();
@@ -68,21 +71,20 @@ const Transportadora: React.FC = () => {
         const data = new FormData();
 
         data.append('avatar', e.target.files[0]);
-
-        api.patch(`/transportadoras/avatar/id=${id}`, data).then(response => {
+        ///
+        api.patch(`/transportadoras/avatar/${id}`, data).then(response => {
           addToast({
             type: 'success',
             title: 'Avatar atualizado!',
           });
 
-          setTransportadora (response.data   );          
+          setTransportadora(response.data);
         });
         // console.log(e.target.files[0]);
       }
     },
-    [addToast]
+    [addToast],
   );
-
 
   const handleSubmit = useCallback(
     async (data: ITransportadoraFormData) => {
@@ -107,7 +109,11 @@ const Transportadora: React.FC = () => {
           telefone: data.telefone,
         };
 
-        await api.post('/transportadoras', formData);
+        if (isUuid(id)) {
+          await api.put(`/transportadoras/${id}`, formData);
+        } else {
+          await api.post('/transportadoras', formData);
+        }
 
         history.push('/dashboard');
 
@@ -131,7 +137,7 @@ const Transportadora: React.FC = () => {
         });
       }
     },
-    [addToast, history],
+    [addToast, history, id],
   );
   return (
     <Dashboard>
@@ -139,18 +145,18 @@ const Transportadora: React.FC = () => {
         <Content>
           <AnimationContainer>
             <Form ref={formRef} onSubmit={handleSubmit}>
-            <AvatarInput>
-            <img src={transportadora?.avatar_url} alt="" />
-            <label htmlFor="avatar">
-              <FiCamera />
-              <input
-                type="file"
-                name="avatar"
-                id="avatar"
-                onChange={handleAvatarChange}
-              />
-            </label>
-          </AvatarInput>
+              <AvatarInput>
+                <img src={transportadora?.avatar_url} alt="" />
+                <label htmlFor="avatar">
+                  <FiCamera />
+                  <input
+                    type="file"
+                    name="avatar"
+                    id="avatar"
+                    onChange={handleAvatarChange}
+                  />
+                </label>
+              </AvatarInput>
 
               <h1>Transportadora</h1>
 

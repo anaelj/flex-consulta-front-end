@@ -9,6 +9,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Profile from '../pages/Profile';
 import PesquisaTransportadora from '../pages/PesquisaTransportadora';
 import Transportadora from '../pages/Transportadoras';
+import PesquisaUsuario from '../pages/PesquisaUsuario';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -16,7 +17,7 @@ const Routes: React.FC = () => (
     <Route path="/forgot-password" exact component={ForgotPassword} />
     <Route path="/reset-password" exact component={ResetPassword} />
 
-    <Route path="/signup" exact component={SignUp} isPrivate />
+    <Route path="/signup/:id" exact component={SignUp} isPrivate />
     <Route path="/dashboard" exact component={Dashboard} isPrivate />
     <Route path="/profile" exact component={Profile} isPrivate />
     <Route
@@ -29,6 +30,12 @@ const Routes: React.FC = () => (
       path="/pesquisatransportadora"
       exact
       component={PesquisaTransportadora}
+      isPrivate
+    />
+    <Route
+      path="/pesquisausuario"
+      exact
+      component={PesquisaUsuario}
       isPrivate
     />
   </Switch>

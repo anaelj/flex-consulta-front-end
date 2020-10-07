@@ -185,6 +185,9 @@ const SignUp: React.FC = () => {
             type="password"
             placeholder="Senha"
           />
+          <Input name="admin_flex" icon={FiUser}  type="checkbox" />
+          <Input name="admin_transportadora" icon={FiUser}  type="checkbox" />
+
 
           <Button type="submit">{isUuid(id) ? 'Atualizar' : 'Cadastrar' }</Button>
         </Form>

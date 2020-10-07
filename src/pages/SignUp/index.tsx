@@ -51,12 +51,15 @@ const SignUp: React.FC = () => {
   const { id } = useParams();
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
+  const [admflex, setAdmFlex] = useState<boolean>(false);
+
   //const [transportadora_id, setTransportadora_id] = useState<string>('');
   //console.log(useParams());
 
   // 172e5dcf-e99f-49ed-b9cb-bee53761b1da
     
-  useEffect(() => {
+   useEffect(() => {
+
     if (isUuid(id)) {
       api
         .get<IUsuario>(`/users/show/${id}`) //http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
@@ -72,9 +75,6 @@ const SignUp: React.FC = () => {
 //          setTransportadora_id(response.data.transportadora_id);
         });
     }
-  }, [id]);
-
-  useEffect(() => {
 
     api
       .get<ITransportadoras[]>(
@@ -92,13 +92,23 @@ const SignUp: React.FC = () => {
         setTransportadoras(temp);
                 //console.log(temp);
       });
-  }, []);
+  }, [id]);
 
   // const options = [
   //   { value: '6c2a6b78-c87d-4141-8863-e4ec5cae0748', label: 'luis transp' },
   //   { value: '607b1fcf-4ab4-44ab-9474-12b5424a4c88', label: 'anael transp' },
   //   { value: '172e5dcf-e99f-49ed-b9cb-bee53761b1da', label: 'tteste 2' },
   // ];
+
+  
+  const handleCheck = useCallback( () => {
+    console.log(admflex);
+      setAdmFlex(!admflex);
+        console.log(admflex);
+      },
+    []  ,
+  );
+  
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -185,8 +195,8 @@ const SignUp: React.FC = () => {
             type="password"
             placeholder="Senha"
           />
-          <Input name="admin_flex" icon={FiUser}  type="checkbox" />
-          <Input name="admin_transportadora" icon={FiUser}  type="checkbox" />
+        
+        <input name="admin_flex" type="checkbox" checked={false} onChange={() => handleCheck()} /> 
 
 
           <Button type="submit">{isUuid(id) ? 'Atualizar' : 'Cadastrar' }</Button>

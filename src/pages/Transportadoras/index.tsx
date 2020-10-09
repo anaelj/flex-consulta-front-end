@@ -83,7 +83,7 @@ const Transportadora: React.FC = () => {
         // console.log(e.target.files[0]);
       }
     },
-    [addToast],
+    [addToast, id],
   );
 
   const handleSubmit = useCallback(

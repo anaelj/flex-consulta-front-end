@@ -54,10 +54,7 @@ const PesquisaUsuario: React.FC = () => {
         // console.log(Usuarios);
         //        console.log(textoDigitado);
       });
-
-    
   }, [textoDigitado]);
-
 
   const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setTextDigitado(event.target.value);

@@ -1,9 +1,23 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { FiMail, FiUser, FiLock, FiHome, FiCreditCard } from 'react-icons/fi';
+import React, {
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+  ChangeEvent,
+} from 'react';
+import {
+  FiMail,
+  FiUser,
+  FiLock,
+  FiHome,
+  FiCreditCard,
+  FiCheck,
+} from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
+import { isUuid } from 'uuidv4';
 import { AnimationContainer } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -12,7 +26,7 @@ import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
 import Select from '../../components/Select';
 import Dashboard from '../Dashboard';
-import { isUuid } from 'uuidv4';
+import CheckboxInput from '../../components/CheckboxInput';
 
 interface SignUpFormData {
   name: string;
@@ -34,7 +48,6 @@ interface IUsuario {
   admin_transportadora: string;
 }
 
-
 interface ITransportadoras {
   id: string;
   name: string;
@@ -45,24 +58,35 @@ interface ISelectOptions {
   label: string;
 }
 
+interface CheckboxOption {
+  id: string;
+
+  value: string;
+
+  label: string;
+}
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const { id } = useParams();
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
-  const [admflex, setAdmFlex] = useState<boolean>(false);
+  //  const [admflex, setAdmFlex] = useState<string>();
 
-  //const [transportadora_id, setTransportadora_id] = useState<string>('');
-  //console.log(useParams());
+  const checkboxOptions: CheckboxOption[] = [
+    { id: 'node', value: 'node', label: 'Node' },
+
+    { id: 'react', value: 'react', label: 'ReactJS' },
+  ];
+  // const [transportadora_id, setTransportadora_id] = useState<string>('');
+  // console.log(useParams());
 
   // 172e5dcf-e99f-49ed-b9cb-bee53761b1da
-    
-   useEffect(() => {
 
+  useEffect(() => {
     if (isUuid(id)) {
       api
-        .get<IUsuario>(`/users/show/${id}`) //http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
+        .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
         .then(response => {
           formRef.current?.setData({
             name: response.data.name,
@@ -72,7 +96,7 @@ const SignUp: React.FC = () => {
             admin_flex: response.data.admin_flex,
             admin_transportadora: response.data.admin_transportadora,
           });
-//          setTransportadora_id(response.data.transportadora_id);
+          //          setTransportadora_id(response.data.transportadora_id);
         });
     }
 
@@ -87,28 +111,20 @@ const SignUp: React.FC = () => {
             label: transportadora.name,
           };
         });
-//        console.log(response.data);
+        //        console.log(response.data);
 
         setTransportadoras(temp);
-                //console.log(temp);
+        // console.log(temp);
       });
   }, [id]);
 
-  // const options = [
-  //   { value: '6c2a6b78-c87d-4141-8863-e4ec5cae0748', label: 'luis transp' },
-  //   { value: '607b1fcf-4ab4-44ab-9474-12b5424a4c88', label: 'anael transp' },
-  //   { value: '172e5dcf-e99f-49ed-b9cb-bee53761b1da', label: 'tteste 2' },
-  // ];
-
-  
-  const handleCheck = useCallback( () => {
-    console.log(admflex);
-      setAdmFlex(!admflex);
-        console.log(admflex);
-      },
-    []  ,
-  );
-  
+  const handleCheck = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    //    setAdmFlex(!event.target.checked ? 'N' : 'S');
+    console.log(event.target.checked);
+    formRef.current?.setData({
+      admin_flex: event.target.checked ? 'N' : 'S',
+    });
+  }, []);
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -126,7 +142,6 @@ const SignUp: React.FC = () => {
         });
 
         console.log(data);
-
 
         if (isUuid(id)) {
           await api.put('/profile', data);
@@ -186,20 +201,28 @@ const SignUp: React.FC = () => {
             options={transportadoras}
             isMulti={false}
             icon={FiHome}
-            defaultValue={transportadoras[2]}            
+            defaultValue={transportadoras[2]}
           />
-          {console.log(transportadoras[2])}
           <Input
             name="password"
             icon={FiLock}
             type="password"
             placeholder="Senha"
           />
-        
-        <input name="admin_flex" type="checkbox" checked={false} onChange={() => handleCheck()} /> 
 
+          <CheckboxInput name="checkbox" options={checkboxOptions} />
 
-          <Button type="submit">{isUuid(id) ? 'Atualizar' : 'Cadastrar' }</Button>
+          <input
+            name="admin_flex"
+            id="admin_flex"
+            //            icon={FiCheck}
+            type="checkbox"
+            onChange={handleCheck}
+          />
+
+          <Button type="submit">
+            {isUuid(id) ? 'Atualizar' : 'Cadastrar'}
+          </Button>
         </Form>
       </AnimationContainer>
     </Dashboard>

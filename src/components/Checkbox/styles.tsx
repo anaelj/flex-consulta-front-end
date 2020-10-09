@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-
+import ReactSelect from 'react-select';
 import Tooltip from '../Tooltip';
 
 interface ContainerProps {
@@ -16,10 +16,10 @@ export const Container = styled.div<ContainerProps>`
 
   display: flex;
   align-items: center;
-  
+
   border: 2px solid #232129;
   color: #666360;
-  
+
   ${props =>
     props.isErrored &&
     css`
@@ -39,29 +39,41 @@ export const Container = styled.div<ContainerProps>`
       color: #ff9000;
     `}
 
+    div {
+      background: #232129;
+      border: 0px;
+      color: #f4ede8;
+    }
 
   & + div {
     margin-top: 8px;
+
+  }
+
+ svg {
+    margin-right: 16px;
+  }
+`;
+export const CustomSelect = styled(ReactSelect)`
+  width: 100%;
+  color: #f4ede8;
+  border: 0px;
+
+  .control {
+    background: 'green';
   }
 
   input {
-    background: transparent;
-    flex: 1;
-    border: 0;
-    color: #f4ede8;
-
-    &::placeholder {
-      color: #666360;
-    }
-  }
-  svg {
-    margin-right: 16px;
+    background: #0000ff;
+    background-color: #0000ff;
   }
 
+  & .Select__indicator Select__dropdown-indicator {
+    border-color: transparent transparent red;
+  }
 `;
 
 export const Error = styled(Tooltip)`
-
   height: 20px;
   margin-left: 16px;
 
@@ -73,9 +85,8 @@ export const Error = styled(Tooltip)`
     background: #c53030;
     color: #fff;
 
-    &::before{
+    &::before {
       border-color: #c53030 transparent;
     }
   }
 `;
-

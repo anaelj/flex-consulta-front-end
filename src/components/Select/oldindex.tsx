@@ -64,8 +64,12 @@ const Select: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
 
         return ref.state.value.value;
       },
+      setValue: (ref, value) => { // deve adicionar essa função
+        ref.select.selectOption(value);
+      },
     });
   }, [fieldName, registerField, rest.isMulti]);
+
 
   return (
     <Container isErrored={!!error} isFocused={isFocused} isFilled={isFilled}>

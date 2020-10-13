@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FiAlertCircle } from 'react-icons/fi';
-import ReactSelect from 'react-select';
+
 import { OptionTypeBase, Props as SelectProps } from 'react-select';
 
 import { useField } from '@unform/core';
@@ -12,12 +12,7 @@ interface Props extends SelectProps<OptionTypeBase> {
   icon: React.ComponentType<IconBaseProps>;
 }
 
-interface Option extends OptionTypeBase {
-  value: string;
-  label: string;
-}
-
-const MySelect: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
+const Select: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
   const selectRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const isFilled = false;
@@ -43,19 +38,14 @@ const MySelect: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
           }
           return ref.state.value.map((option: OptionTypeBase) => option.value);
         }
-
         if (!ref.state.value) {
           return '';
         }
         return ref.state.value.value;
       },
-      setValue: (ref: ReactSelect, value: Option) => {
-        console.log(value);
-        ref.select.selectOption(value);
-      },
-      clearValue: (ref: ReactSelect) => {
-        ref.select.clearValue();
-      }
+      // setValue: (ref, value) => {
+      //   ref.select.selectOption(value);
+      // },
     });
   }, [fieldName, registerField, rest.isMulti]);
 
@@ -79,4 +69,4 @@ const MySelect: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
   );
 };
 
-export default MySelect;
+export default Select;

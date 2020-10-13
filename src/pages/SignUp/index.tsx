@@ -12,9 +12,11 @@ import getValidationErrors from '../../utils/getValidationErros';
 import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
 // import Select from '../../components/Select/index.js';
-import Select from '../../components/Select';
+import MySelect from '../../components/Select';
 import Dashboard from '../Dashboard';
 import Checkbox from '../../components/Checkbox';
+import { OptionTypeBase, Props as SelectProps } from 'react-select';
+
 
 interface SignUpFormData {
   name: string;
@@ -55,15 +57,22 @@ interface CheckboxOption {
   value: string;
   label: string;
 }
+
+interface OptionOfSelect extends OptionTypeBase {
+  value: string;
+  label: string;
+  selecionado: string;
+}
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const [transportadoraId, setTransportadoraId] = useState<any>();
   const { addToast } = useToast();
   const { id } = useParams();
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
   const [checkboxDefault, setCheckboxDefault] = useState<string[]>([]);
-  const [selectSelecionado, setSelectSelecionado] = useState<ISelectOptions>();
+  const [transportadoraID , setTransportadoraID] = useState<string>();
+  const [usuario, setUsuario] = useState<IUsuario>();
 
   const checkboxOptions: CheckboxOption[] = [
     {
@@ -75,43 +84,25 @@ const SignUp: React.FC = () => {
   ];
 
   useEffect(() => {
-    let testeTransID = '';
+        if (isUuid(id)) {
+              api
+              .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
+              .then(response => {
+                  const arr = [];
+                  arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
+                  arr.push(
+                    response.data.admin_transportadora === 'S'
+                      ? 'admin_transportadora'
+                      : '',
+                  );
+                  setCheckboxDefault(arr);
+                  setTransportadoraID(response.data.transportadora_id);
+                  setUsuario(response.data);
+              });
+          } 
+      }, []);
 
-    if (isUuid(id)) {
-      api
-        .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
-        .then(response => {
-          formRef.current?.setData({
-            name: response.data.name,
-            email: response.data.email,
-            //            cpf: response.data.cpf,
-            transportadora_id: response.data.transportadora_id,
-            admin_flex: response.data.admin_flex,
-            admin_transportadora: response.data.admin_transportadora,
-            CheckBoxAdms: checkboxOptions,
-
-            selecTransportadora: response.data.transportadora_id,
-          });
-
-          setTransportadoraId(response.data.transportadora_id);
-          //          console.log(response.data);
-          //          console.log(transportadoraId); // nesse ponto aqui o campo transportadoraId está null, não deveria porque eu setei acima  setTransportadoraId
-
-          testeTransID = response.data.transportadora_id;
-
-          const arr = [];
-
-          arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
-          arr.push(
-            response.data.admin_transportadora === 'S'
-              ? 'admin_transportadora'
-              : '',
-          );
-
-          setCheckboxDefault(arr);
-        });
-    }
-
+  useEffect(() => {
     api
       .get<ITransportadoras[]>(
         '/transportadoras/172e5dcf-e99f-49ed-b9cb-bee53761b1da',
@@ -121,36 +112,36 @@ const SignUp: React.FC = () => {
           return {
             label: transportadora.name,
             value: transportadora.id,
-            selecionado: transportadora.id === testeTransID ? 'sim' : 'não',
+            selecionado: transportadora.id === transportadoraID ? 'sim' : 'não',
           };
         });
-
         setTransportadoras(temp);
-
-        //        console.log(temp);
-
-        const transpSelecionada = temp.filter(res => {
-          return res.selecionado === 'sim';
-        });
-
-        console.log(transpSelecionada[0]);
-
-        setSelectSelecionado(transpSelecionada[0]);
-
-        //        console.log(temp);
-        //        console.log(response.data);
-
-        // ]);
       });
-  }, [id]);
 
-  const handleGetTransp = () => {
-    const retorno = transportadoras.filter(res => {
+   
+  }, [usuario]);
+
+
+  useEffect(() => {
+
+      if (usuario) {
+        formRef.current?.setData({
+          name: usuario.name,
+          email: usuario.email,
+          cpf: usuario.cpf,
+          transportadora_id: !handleGetTransp(transportadoras) ? [] : handleGetTransp(transportadoras) , 
+          admin_flex: usuario.admin_flex,
+          admin_transportadora: usuario.admin_transportadora,
+          CheckBoxAdms: checkboxOptions,
+        });        
+    }
+  }, [usuario, transportadoras]);
+
+
+  const handleGetTransp = (value: OptionOfSelect[] ): OptionOfSelect => {
+    const retorno = value.filter(res => {
       return res.selecionado === 'sim';
     });
-
-    //    console.log(retorno);
-    console.log(retorno[0]);
 
     return retorno[0];
   };
@@ -177,13 +168,11 @@ const SignUp: React.FC = () => {
           : 'N';
         data.admin_flex = data.CheckBoxAdms.includes('admflex') ? 'S' : 'N';
 
-        data.transportadora_id = data.selecTransportadora;
-
-        //        console.log(data);
-
         delete data.CheckBoxAdms;
 
-        //        console.log(data);
+
+        console.log(data);
+
 
         if (isUuid(id)) {
           await api.put(`/profile/${id}`, data);
@@ -223,7 +212,6 @@ const SignUp: React.FC = () => {
           onSubmit={handleSubmit}
           initialData={{
             CheckBoxAdms: checkboxDefault,
-            cpf: '12',
           }}
         >
           <h1>Cadastro de Usuários</h1>
@@ -247,17 +235,13 @@ const SignUp: React.FC = () => {
             type="text"
             autoComplete="false"
           />
-          {/*
-          <Select name="techs" options={transportadora2} />
-*/}
 
-          <Select
-            name="selecTransportadora"
+          <MySelect
+            name="transportadora_id"
             placeholder="Transportadora"
             options={transportadoras}
             isMulti={false}
             icon={FiHome}
-            defaultValue={selectSelecionado}
           />
 
           <Input

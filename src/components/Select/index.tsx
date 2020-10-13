@@ -15,7 +15,6 @@ interface Props extends SelectProps<OptionTypeBase> {
 const Select: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
   const selectRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
-  //  const [isFilled, setIsFilled] = useState(false);
   const isFilled = false;
 
   const handleInputFocus = useCallback(() => {
@@ -24,7 +23,6 @@ const Select: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
 
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
-    //    setIsFilled(!!selectRef.current?.cu);
   }, []);
 
   const { fieldName, defaultValue, registerField, error } = useField(name);
@@ -33,43 +31,23 @@ const Select: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
     registerField({
       name: fieldName,
       ref: selectRef.current,
-      getValue: (ref: any) => ref.state.value,
-      setValue: (ref, value) => {
-        ref.select.setValue(value || null);
-      },
-      clearValue: (ref: any) => {
-        ref.select.clearValue();
-      },
-    });
-  }, [fieldName, registerField]);
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-
-      ref: selectRef.current,
-
       getValue: (ref: any) => {
         if (rest.isMulti) {
           if (!ref.state.value) {
             return [];
           }
-
           return ref.state.value.map((option: OptionTypeBase) => option.value);
         }
-
         if (!ref.state.value) {
           return '';
         }
-
         return ref.state.value.value;
       },
-      setValue: (ref, value) => { // deve adicionar essa função
-        ref.select.selectOption(value);
-      },
+      // setValue: (ref, value) => {
+      //   ref.select.selectOption(value);
+      // },
     });
   }, [fieldName, registerField, rest.isMulti]);
-
 
   return (
     <Container isErrored={!!error} isFocused={isFocused} isFilled={isFilled}>

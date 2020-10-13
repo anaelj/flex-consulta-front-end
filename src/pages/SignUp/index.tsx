@@ -1,17 +1,5 @@
-import React, {
-  useCallback,
-  useRef,
-  useEffect,
-  useState,
-  
-} from 'react';
-import {
-  FiMail,
-  FiUser,
-  FiLock,
-  FiHome,
-  FiCreditCard,  
-} from 'react-icons/fi';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
+import { FiMail, FiUser, FiLock, FiHome, FiCreditCard } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -23,7 +11,8 @@ import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
 import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
-import Select from '../../components/Select/index.js';
+// import Select from '../../components/Select/index.js';
+import Select from '../../components/Select';
 import Dashboard from '../Dashboard';
 import Checkbox from '../../components/Checkbox';
 
@@ -36,6 +25,7 @@ interface SignUpFormData {
   admin_flex: string;
   admin_transportadora: string;
   CheckBoxAdms: string[];
+  selecTransportadora: string;
 }
 
 interface IUsuario {
@@ -57,35 +47,36 @@ interface ITransportadoras {
 interface ISelectOptions {
   label: string;
   value: string;
+  selecionado: string;
 }
 
 interface CheckboxOption {
   id: string;
-
   value: string;
-
   label: string;
 }
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const [transportadoraId, setTransportadoraId] = useState('xx');
+  const [transportadoraId, setTransportadoraId] = useState<any>();
   const { addToast } = useToast();
   const { id } = useParams();
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
   const [checkboxDefault, setCheckboxDefault] = useState<string[]>([]);
-  
+  const [selectSelecionado, setSelectSelecionado] = useState<ISelectOptions>();
+
   const checkboxOptions: CheckboxOption[] = [
-    { id: 'admin_transportadora', value: 'admtransportadora', label: 'Adm Transportadora' },
+    {
+      id: 'admin_transportadora',
+      value: 'admtransportadora',
+      label: 'Adm Transportadora',
+    },
     { id: 'admin_flex', value: 'admflex', label: 'Adm FlexConsulta' },
   ];
-  // console.log(useParams());
-
-  // 172e5dcf-e99f-49ed-b9cb-bee53761b1da
-
-  
 
   useEffect(() => {
+    let testeTransID = '';
+
     if (isUuid(id)) {
       api
         .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
@@ -93,26 +84,31 @@ const SignUp: React.FC = () => {
           formRef.current?.setData({
             name: response.data.name,
             email: response.data.email,
-//            cpf: response.data.cpf,
-//            transportadora_id: response.data.transportadora_id,
+            //            cpf: response.data.cpf,
+            transportadora_id: response.data.transportadora_id,
             admin_flex: response.data.admin_flex,
             admin_transportadora: response.data.admin_transportadora,
-            CheckBoxAdms: checkboxOptions
+            CheckBoxAdms: checkboxOptions,
+
+            selecTransportadora: response.data.transportadora_id,
           });
-          
-          setTransportadoraId('response.data.transportadora_id');
-//          console.log(response.data.transportadora_id);
-//          console.log(transportadoraId);
+
+          setTransportadoraId(response.data.transportadora_id);
+          //          console.log(response.data);
+          //          console.log(transportadoraId); // nesse ponto aqui o campo transportadoraId está null, não deveria porque eu setei acima  setTransportadoraId
+
+          testeTransID = response.data.transportadora_id;
 
           const arr = [];
 
-          arr.push(response.data.admin_flex ===  'S' ? 'admin_flex' : '' );
-          arr.push(response.data.admin_transportadora === 'S' ? 'admin_transportadora' : '');
+          arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
+          arr.push(
+            response.data.admin_transportadora === 'S'
+              ? 'admin_transportadora'
+              : '',
+          );
 
-          setCheckboxDefault( arr );
-
-          //console.log(arr);
-           
+          setCheckboxDefault(arr);
         });
     }
 
@@ -125,32 +121,39 @@ const SignUp: React.FC = () => {
           return {
             label: transportadora.name,
             value: transportadora.id,
+            selecionado: transportadora.id === testeTransID ? 'sim' : 'não',
           };
         });
+
+        setTransportadoras(temp);
+
+        //        console.log(temp);
+
+        const transpSelecionada = temp.filter(res => {
+          return res.selecionado === 'sim';
+        });
+
+        console.log(transpSelecionada[0]);
+
+        setSelectSelecionado(transpSelecionada[0]);
+
+        //        console.log(temp);
         //        console.log(response.data);
 
-        setTransportadoras(  [
-          { label: "teste", value: "e722cc3a-8f7f-4dfa-9a7d-48caa5367495" },
-          { label: "teste 2", value: "e722cc3a-8f7f-4dfa-9a7d-48caa5367496" }
-        ]);
-
-
-        
-        console.log('temp');
-        console.log(temp);
-        console.log('transportadoras');
-        console.log(transportadoras);
-        console.log('arrray');
-        console.log(        [
-          { label: "teste", value: 1 },
-          { label: "teste 2", value: 2 }
-        ]
-        );
-
-
-
+        // ]);
       });
   }, [id]);
+
+  const handleGetTransp = () => {
+    const retorno = transportadoras.filter(res => {
+      return res.selecionado === 'sim';
+    });
+
+    //    console.log(retorno);
+    console.log(retorno[0]);
+
+    return retorno[0];
+  };
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -167,12 +170,20 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        data.admin_transportadora = data.CheckBoxAdms.includes('admtransportadora') ? 'S' : 'N';
+        data.admin_transportadora = data.CheckBoxAdms.includes(
+          'admtransportadora',
+        )
+          ? 'S'
+          : 'N';
         data.admin_flex = data.CheckBoxAdms.includes('admflex') ? 'S' : 'N';
+
+        data.transportadora_id = data.selecTransportadora;
+
+        //        console.log(data);
 
         delete data.CheckBoxAdms;
 
-//        console.log(data);
+        //        console.log(data);
 
         if (isUuid(id)) {
           await api.put(`/profile/${id}`, data);
@@ -207,8 +218,13 @@ const SignUp: React.FC = () => {
   return (
     <Dashboard>
       <AnimationContainer>
-        <Form ref={formRef} onSubmit={handleSubmit} 
-          initialData={{ CheckBoxAdms: checkboxDefault, techs: 'e722cc3a-8f7f-4dfa-9a7d-48caa5367495', cpf:'12' }}
+        <Form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          initialData={{
+            CheckBoxAdms: checkboxDefault,
+            cpf: '12',
+          }}
         >
           <h1>Cadastro de Usuários</h1>
 
@@ -231,25 +247,19 @@ const SignUp: React.FC = () => {
             type="text"
             autoComplete="false"
           />
+          {/*
+          <Select name="techs" options={transportadora2} />
+*/}
 
-        <Select
-          name="techs"
-          options={transportadoras}
-        />
-
-
-{
-  /*
           <Select
-            name="transportadora_id"
+            name="selecTransportadora"
             placeholder="Transportadora"
             options={transportadoras}
             isMulti={false}
             icon={FiHome}
+            defaultValue={selectSelecionado}
           />
-*/
 
-}
           <Input
             name="password"
             icon={FiLock}

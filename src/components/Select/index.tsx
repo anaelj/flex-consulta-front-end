@@ -50,7 +50,7 @@ const MySelect: React.FC<Props> = ({ name, icon: Icon, ...rest }) => {
         return ref.state.value.value;
       },
       setValue: (ref: ReactSelect, value: Option) => {
-        console.log(value);
+//        console.log(value);
         ref.select.selectOption(value);
       },
       clearValue: (ref: ReactSelect) => {

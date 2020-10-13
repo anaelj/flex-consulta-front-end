@@ -15,7 +15,7 @@ import api from '../../services/api';
 import MySelect from '../../components/Select';
 import Dashboard from '../Dashboard';
 import Checkbox from '../../components/Checkbox';
-import { OptionTypeBase, Props as SelectProps } from 'react-select';
+import { OptionTypeBase } from 'react-select';
 
 
 interface SignUpFormData {
@@ -100,7 +100,7 @@ const SignUp: React.FC = () => {
                   setUsuario(response.data);
               });
           } 
-      }, []);
+      }, [id]);
 
   useEffect(() => {
     api
@@ -119,7 +119,7 @@ const SignUp: React.FC = () => {
       });
 
    
-  }, [usuario]);
+  }, [id, transportadoraID]);
 
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const SignUp: React.FC = () => {
           CheckBoxAdms: checkboxOptions,
         });        
     }
-  }, [usuario, transportadoras]);
+  }, [usuario, transportadoras, checkboxOptions ]);
 
 
   const handleGetTransp = (value: OptionOfSelect[] ): OptionOfSelect => {

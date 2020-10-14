@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { FiMail, FiUser, FiLock, FiHome, FiCreditCard } from 'react-icons/fi';
+import { FiMail, FiUser, FiHome, FiCreditCard } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -16,7 +16,8 @@ import MySelect from '../../components/Select';
 import Dashboard from '../Dashboard';
 import Checkbox from '../../components/Checkbox';
 import { OptionTypeBase } from 'react-select';
-
+import { useAuth } from '../../hooks/auth';
+import validateCPF from './validaCPF';
 
 interface SignUpFormData {
   name: string;
@@ -65,6 +66,10 @@ interface OptionOfSelect extends OptionTypeBase {
 }
 
 const SignUp: React.FC = () => {
+
+  const { user } = useAuth();
+  const {admin_flex, admin_transportadora} = user;
+
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const { id } = useParams();
@@ -73,28 +78,56 @@ const SignUp: React.FC = () => {
   const [checkboxDefault, setCheckboxDefault] = useState<string[]>([]);
   const [transportadoraID , setTransportadoraID] = useState<string>();
   const [usuario, setUsuario] = useState<IUsuario>();
+  const [checkboxOptions, setCheckboxOptions] = useState<CheckboxOption[]>([]);
 
-  const checkboxOptions: CheckboxOption[] = [
-    {
-      id: 'admin_transportadora',
-      value: 'admtransportadora',
-      label: 'Adm Transportadora',
-    },
-    { id: 'admin_flex', value: 'admflex', label: 'Adm FlexConsulta' },
-  ];
+  // const checkboxOptions: CheckboxOption[] = [
+  //   // {
+  //   //   id: 'admin_transportadora',
+  //   //   value: 'admin_transportadora',
+  //   //   label: 'Adm Transportadora',
+  //   // },
+  //   // { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,
+  // ];
 
   useEffect(() => {
+
+    const  admflex =  { id: "admin_flex", value: "admin_flex", label: "Adm FlexConsulta" }
+    const  admtranspobj =  {
+      id: 'admin_transportadora',
+      value: 'admin_transportadora',
+      label: 'Adm Transportadora',  }
+
+      const arrayLocal = [];
+      
+      if (admin_transportadora === 'S' || admin_flex === 'S') { 
+        arrayLocal.push(admtranspobj);
+      }
+      
+      if (admin_flex === 'S') { 
+        arrayLocal.push(admflex);
+      }
+      setCheckboxOptions(arrayLocal);
+
+  }, [admin_transportadora, admin_flex] );
+
+  useEffect(() => {
+
+//    { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,
+
         if (isUuid(id)) {
               api
               .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
               .then(response => {
                   const arr = [];
+
+
                   arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
                   arr.push(
                     response.data.admin_transportadora === 'S'
                       ? 'admin_transportadora'
                       : '',
                   );
+
                   setCheckboxDefault(arr);
                   setTransportadoraID(response.data.transportadora_id);
                   setUsuario(response.data);
@@ -155,18 +188,27 @@ const SignUp: React.FC = () => {
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido'),
-          password: Yup.string().min(6, 'Mínimo 6 dígitos'),
+          cpf: Yup.string()
+            .length(11, 'Insira um CPF válido.')
+            .test('is-valid', 'Insira um CPF válido.', value => {
+              if (!value) return false;
+              const cpf = value
+                .replace('.', '')
+                .replace('.', '')
+                .replace('-', '');
+              return validateCPF(cpf);
+            }),
         });
         await schema.validate(data, {
           abortEarly: false,
         });
 
         data.admin_transportadora = data.CheckBoxAdms.includes(
-          'admtransportadora',
+          'admin_transportadora',
         )
           ? 'S'
           : 'N';
-        data.admin_flex = data.CheckBoxAdms.includes('admflex') ? 'S' : 'N';
+        data.admin_flex = data.CheckBoxAdms.includes('adm_flex') ? 'S' : 'N';
 
         delete data.CheckBoxAdms;
 
@@ -216,7 +258,11 @@ const SignUp: React.FC = () => {
         >
           <h1>Cadastro de Usuários</h1>
 
-          <Checkbox id={id} name="CheckBoxAdms" options={checkboxOptions} />
+          {
+            (admin_flex === 'S' || admin_transportadora === 'S') &&
+              <Checkbox id={id} name="CheckBoxAdms" options={checkboxOptions} />
+            
+          }
 
           <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
 
@@ -242,13 +288,6 @@ const SignUp: React.FC = () => {
             options={transportadoras}
             isMulti={false}
             icon={FiHome}
-          />
-
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="Senha"
           />
 
           <Button type="submit">

@@ -56,12 +56,11 @@ const Dashboard: React.FC = ({ children }) => {
       </Header>
       <Content>
         <ContentLeft>
-          <ButtonLarge>Consulta Viagens</ButtonLarge>
+          <ButtonLarge onClick={() => history.push('/pesquisamotorista')}>Consulta Viagens</ButtonLarge>
           <ButtonLarge onClick={() => history.push('/pesquisausuario')}>
             Cadastro de Usuários
           </ButtonLarge>
-          <ButtonLarge>Autorização de Transportadoras</ButtonLarge>
-          <ButtonLarge onClick={() => history.push('/pesquisatransportadora')}>
+            <ButtonLarge onClick={() => history.push('/pesquisatransportadora')}>
             <span>Transportadoras</span>
           </ButtonLarge>
         </ContentLeft>

@@ -83,20 +83,7 @@ const PesquisaUsuario: React.FC = () => {
         <Content>
           <AnimationContainer>
             <Form ref={formRef} onSubmit={() => {}}>
-              <h1>Usuário</h1>
-
-              <InputPesquisa>
-                <Input
-                  name="name"
-                  icon={FiSearch}
-                  placeholder="Pesquise por nome"
-                  type="text"
-                  onChange={handlePesquisa}
-                />
-                <Button onClick={() => history.push('/signup/new')}>
-                  <FiFilePlus color="#03b0ef" size="25px" />
-                </Button>
-              </InputPesquisa>
+              <h1>Viagens</h1>
 
               <Lista>
                 <ul className="items-grid">

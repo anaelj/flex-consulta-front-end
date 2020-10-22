@@ -10,6 +10,8 @@ import Profile from '../pages/Profile';
 import PesquisaTransportadora from '../pages/PesquisaTransportadora';
 import Transportadora from '../pages/Transportadoras';
 import PesquisaUsuario from '../pages/PesquisaUsuario';
+import PesquisaMotorista from '../pages/PesquisaMotorista';
+import PesquisaViagem from '../pages/PesquisaViagem';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -36,6 +38,18 @@ const Routes: React.FC = () => (
       path="/pesquisausuario"
       exact
       component={PesquisaUsuario}
+      isPrivate
+    />
+    <Route
+      path="/pesquisamotorista"
+      exact
+      component={PesquisaMotorista}
+      isPrivate
+    />
+    <Route
+      path="/pesquisaviagem"
+      exact
+      component={PesquisaViagem}
       isPrivate
     />
   </Switch>

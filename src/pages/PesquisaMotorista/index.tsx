@@ -16,16 +16,11 @@ import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
 import Button from '../../components/Button';
 
-interface ITransportadoraFormData {
-  name: string;
-  email: string;
-  contato: string;
-  telefone: string;
-}
 
-interface ITransportadoras {
+interface IUsuarios {
   id: string;
   name: string;
+  cpf: string;
   avatar_url: string;
 }
 
@@ -33,43 +28,42 @@ interface IPesquisaData {
   textoDigitado: string;
 }
 
-const PesquisaTransportadora: React.FC = () => {
-  const [transportadoras, setTransportadoras] = useState<ITransportadoras[]>(
-    [],
-  );
+const PesquisaUsuario: React.FC = () => {
+  const [usuarios, setUsuarios] = useState<IUsuarios[]>([]);
   const formRef = useRef<FormHandles>(null);
   const [textoDigitado, setTextDigitado] = useState('');
   const history = useHistory();
-
   useEffect(() => {
     api
-      .get<ITransportadoras[]>(
-        '/transportadoras/172e5dcf-e99f-49ed-b9cb-bee53761b1da',
-      )
+      .get<IUsuarios[]>('/users/172e5dcf-e99f-49ed-b9cb-bee53761b1da')
       .then(response => {
-        const temp = response.data.map(transportadora => {
+        const temp = response.data.map(usuario => {
           return {
-            name: transportadora.name,
-            id: transportadora.id,
-            avatar_url: transportadora.avatar_url
-              ? transportadora.avatar_url
+            name: usuario.name,
+            id: usuario.id,
+            cpf: usuario.cpf,
+            avatar_url: usuario.avatar_url
+              ? usuario.avatar_url
               : 'https://www.flexconsulta.com.br/static/media/sign-in-background.d20fefa2.png',
           };
         });
         // filtrar aqui textoDigitado
-        setTransportadoras(
-          temp.filter(item => item.name.toLowerCase().includes(textoDigitado.toLowerCase())).sort(
-            function (a, b) {
-              if (a.name > b.name) {
-                return 1;
-              }
-              if (a.name < b.name) {
-                return -1;
-              }
-              return 0;
-          })
-          );
-        // console.log(transportadoras);
+        setUsuarios(temp.filter(item => 
+          (item.name.toLowerCase().includes(textoDigitado.toLowerCase()) ||
+          (item.cpf && item.cpf.includes(textoDigitado))) 
+          
+          ).sort(
+          function (a, b) {
+            if (a.name > b.name) {
+              return 1;
+            }
+            if (a.name < b.name) {
+              return -1;
+            }
+            return 0;
+        }),
+      );
+        // console.log(Usuarios);
         //        console.log(textoDigitado);
       });
   }, [textoDigitado]);
@@ -78,10 +72,9 @@ const PesquisaTransportadora: React.FC = () => {
     setTextDigitado(event.target.value);
   }, []);
 
-  const handleOpenTransportadora = useCallback(
+  const handleOpenUsuario = useCallback(
     (id: string) => {
-      history.push(`/transportadoras/${id}`);
-      //      console.log(`/transporadoras/${id}`);
+      history.push(`/signup/${id}`);
     },
     [history],
   );
@@ -92,33 +85,30 @@ const PesquisaTransportadora: React.FC = () => {
         <Content>
           <AnimationContainer>
             <Form ref={formRef} onSubmit={() => {}}>
-              <h1>Transportadora</h1>
+              <h1>Motoristas</h1>
 
               <InputPesquisa>
                 <Input
                   name="name"
                   icon={FiSearch}
-                  placeholder="Pesquise por nome"
+                  placeholder="Informe nome ou CPF"
                   type="text"
                   onChange={handlePesquisa}
                 />
-                <Button onClick={() => history.push('/transportadoras/new')}>
-                  <FiFilePlus color="#03b0ef" size="25px" />
-                </Button>
               </InputPesquisa>
 
               <Lista>
                 <ul className="items-grid">
-                  {transportadoras.map(transportadora => (
+                  {usuarios.map(usuario => (
                     <li
-                      key={transportadora.id}
-                      onClick={() =>
-                        handleOpenTransportadora(transportadora.id)
-                      }
+                      key={usuario.id}
+                      onClick={() => handleOpenUsuario(usuario.id)}
                     >
-                      <img src={transportadora.avatar_url} alt="" />
-
-                      {transportadora.name}
+                     <img src={usuario.avatar_url} alt="" />
+                      <div>
+                         <span> {usuario.name} </span>
+                         <span> {usuario.cpf} </span>
+                       </div>
                     </li>
                   ))}
                 </ul>
@@ -131,4 +121,4 @@ const PesquisaTransportadora: React.FC = () => {
   );
 };
 
-export default PesquisaTransportadora;
+export default PesquisaUsuario;

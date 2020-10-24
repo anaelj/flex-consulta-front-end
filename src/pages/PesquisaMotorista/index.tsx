@@ -16,7 +16,6 @@ import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
 import Button from '../../components/Button';
 
-
 interface IUsuarios {
   id: string;
   name: string;
@@ -48,21 +47,23 @@ const PesquisaUsuario: React.FC = () => {
           };
         });
         // filtrar aqui textoDigitado
-        setUsuarios(temp.filter(item => 
-          (item.name.toLowerCase().includes(textoDigitado.toLowerCase()) ||
-          (item.cpf && item.cpf.includes(textoDigitado))) 
-          
-          ).sort(
-          function (a, b) {
-            if (a.name > b.name) {
-              return 1;
-            }
-            if (a.name < b.name) {
-              return -1;
-            }
-            return 0;
-        }),
-      );
+        setUsuarios(
+          temp
+            .filter(
+              item =>
+                item.name.toLowerCase().includes(textoDigitado.toLowerCase()) ||
+                (item.cpf && item.cpf.includes(textoDigitado)),
+            )
+            .sort(function (a, b) {
+              if (a.name > b.name) {
+                return 1;
+              }
+              if (a.name < b.name) {
+                return -1;
+              }
+              return 0;
+            }),
+        );
         // console.log(Usuarios);
         //        console.log(textoDigitado);
       });
@@ -72,9 +73,9 @@ const PesquisaUsuario: React.FC = () => {
     setTextDigitado(event.target.value);
   }, []);
 
-  const handleOpenUsuario = useCallback(
-    (id: string) => {
-      history.push(`/signup/${id}`);
+  const handleOpenViagens = useCallback(
+    (id_motorista: string) => {
+      history.push(`/listaviagens/${id_motorista}`);
     },
     [history],
   );
@@ -102,13 +103,13 @@ const PesquisaUsuario: React.FC = () => {
                   {usuarios.map(usuario => (
                     <li
                       key={usuario.id}
-                      onClick={() => handleOpenUsuario(usuario.id)}
+                      onClick={() => handleOpenViagens(usuario.id)}
                     >
-                     <img src={usuario.avatar_url} alt="" />
+                      <img src={usuario.avatar_url} alt="" />
                       <div>
-                         <span> {usuario.name} </span>
-                         <span> {usuario.cpf} </span>
-                       </div>
+                        <span> {usuario.name} </span>
+                        <span> {usuario.cpf} </span>
+                      </div>
                     </li>
                   ))}
                 </ul>

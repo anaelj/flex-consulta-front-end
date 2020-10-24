@@ -11,7 +11,7 @@ import PesquisaTransportadora from '../pages/PesquisaTransportadora';
 import Transportadora from '../pages/Transportadoras';
 import PesquisaUsuario from '../pages/PesquisaUsuario';
 import PesquisaMotorista from '../pages/PesquisaMotorista';
-import PesquisaViagem from '../pages/PesquisaViagem';
+import ListaViagens from '../pages/ListaViagens';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -46,12 +46,7 @@ const Routes: React.FC = () => (
       component={PesquisaMotorista}
       isPrivate
     />
-    <Route
-      path="/pesquisaviagem"
-      exact
-      component={PesquisaViagem}
-      isPrivate
-    />
+    <Route path="/listaviagens/:id" exact component={ListaViagens} isPrivate />
   </Switch>
 );
 

@@ -58,8 +58,11 @@ const PesquisaTransportadora: React.FC = () => {
         });
         // filtrar aqui textoDigitado
         setTransportadoras(
-          temp.filter(item => item.name.toLowerCase().includes(textoDigitado.toLowerCase())).sort(
-            function (a, b) {
+          temp
+            .filter(item =>
+              item.name.toLowerCase().includes(textoDigitado.toLowerCase()),
+            )
+            .sort(function (a, b) {
               if (a.name > b.name) {
                 return 1;
               }
@@ -67,8 +70,8 @@ const PesquisaTransportadora: React.FC = () => {
                 return -1;
               }
               return 0;
-          })
-          );
+            }),
+        );
         // console.log(transportadoras);
         //        console.log(textoDigitado);
       });
@@ -103,7 +106,7 @@ const PesquisaTransportadora: React.FC = () => {
                   onChange={handlePesquisa}
                 />
                 <Button onClick={() => history.push('/transportadoras/new')}>
-                  <FiFilePlus color="#03b0ef" size="25px" />
+                  <FiFilePlus color="#000000" size="25px" />
                 </Button>
               </InputPesquisa>
 
@@ -113,8 +116,7 @@ const PesquisaTransportadora: React.FC = () => {
                     <li
                       key={transportadora.id}
                       onClick={() =>
-                        handleOpenTransportadora(transportadora.id)
-                      }
+                        handleOpenTransportadora(transportadora.id)}
                     >
                       <img src={transportadora.avatar_url} alt="" />
 

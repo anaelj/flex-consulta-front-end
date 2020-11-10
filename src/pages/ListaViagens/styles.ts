@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   align-items: stretch;
+  margin-top: 60px;
 `;
 
 export const ListaViagens = styled.div`
@@ -24,7 +25,7 @@ export const ListaViagens = styled.div`
     margin-top: 10px;
     padding-right: 5px;
     border: 0px;
-    border: 2px solid #ff9000;
+    border: 2px solid #03b0ef;
     border-radius: 8px;
     div {
       border: 0px;

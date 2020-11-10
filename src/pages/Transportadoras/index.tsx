@@ -148,7 +148,7 @@ const Transportadora: React.FC = () => {
               <AvatarInput>
                 <img src={transportadora?.avatar_url} alt="" />
                 <label htmlFor="avatar">
-                  <FiCamera />
+                  <FiCamera color="#00000" />
                   <input
                     type="file"
                     name="avatar"

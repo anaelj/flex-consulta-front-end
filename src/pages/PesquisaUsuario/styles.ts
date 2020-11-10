@@ -90,7 +90,7 @@ export const Lista = styled.div`
 
   .items-grid li {
     background: #232129;
-    border: 2px solid #ff9000;
+    border: 2px solid #03b0ef;
     height: 180px;
     border-radius: 8px;
     padding: 32px 24px 16px;

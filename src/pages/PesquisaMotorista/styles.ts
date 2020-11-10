@@ -38,7 +38,6 @@ export const Lista = styled.div`
   }
 
   .items-grid li {
-      
     margin-bottom: 12px;
     cursor: pointer;
 
@@ -55,10 +54,10 @@ export const Lista = styled.div`
       height: 56px;
       border-radius: 50%;
       left: 0px;
-    }    
+    }
 
     background: #232129;
-    border: 2px solid #ff9000;
+    border: 2px solid #03b0ef;
     height: 90px;
     border-radius: 8px;
     padding: 0px 10px 10px;
@@ -71,17 +70,12 @@ export const Lista = styled.div`
 
     span {
       margin-left: 10px;
-      
     }
 
     cursor: pointer;
-
   }
 
-
-
   .items-grid li span {
-
     flex: 1;
     flex-direction: row;
     align-items: left;
@@ -89,7 +83,6 @@ export const Lista = styled.div`
     color: var(--title-color);
   }
 
- 
   .items-grid li span {
     flex: 1;
     margin-top: 12px;
@@ -99,6 +92,4 @@ export const Lista = styled.div`
     align-items: left;
     color: var(--title-color);
   }
-
-
 `;

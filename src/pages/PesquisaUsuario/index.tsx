@@ -50,17 +50,21 @@ const PesquisaUsuario: React.FC = () => {
           };
         });
         // filtrar aqui textoDigitado
-        setUsuarios(temp.filter(item => item.name.toLowerCase().includes(textoDigitado.toLowerCase())).sort(
-          function (a, b) {
-            if (a.name > b.name) {
-              return 1;
-            }
-            if (a.name < b.name) {
-              return -1;
-            }
-            return 0;
-        }),
-      );
+        setUsuarios(
+          temp
+            .filter(item =>
+              item.name.toLowerCase().includes(textoDigitado.toLowerCase()),
+            )
+            .sort(function (a, b) {
+              if (a.name > b.name) {
+                return 1;
+              }
+              if (a.name < b.name) {
+                return -1;
+              }
+              return 0;
+            }),
+        );
         // console.log(Usuarios);
         //        console.log(textoDigitado);
       });
@@ -94,7 +98,7 @@ const PesquisaUsuario: React.FC = () => {
                   onChange={handlePesquisa}
                 />
                 <Button onClick={() => history.push('/signup/new')}>
-                  <FiFilePlus color="#03b0ef" size="25px" />
+                  <FiFilePlus color="#000000" size="25px" />
                 </Button>
               </InputPesquisa>
 

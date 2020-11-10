@@ -1,10 +1,18 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  overflow-x: hidden;
+  @media (max-width: 800px) {
+    max-width: 375px;
+  }
+`;
 
 export const Header = styled.header`
   padding: 32px 0;
   background: #28262e;
+  @media (max-width: 800px) {
+    max-width: 375px;
+  }
 `;
 
 export const HeaderContent = styled.div`
@@ -27,6 +35,9 @@ export const HeaderContent = styled.div`
       width: 20px;
       height: 20px;
     }
+  }
+  @media (max-width: 800px) {
+    max-width: 375px;
   }
 `;
 
@@ -57,12 +68,21 @@ export const Profile = styled.div`
       }
     }
   }
+
+  @media (max-width: 800px) {
+    max-width: 375px;
+  }
 `;
 
 export const Content = styled.main`
   max-width: 1120px;
   margin: 5px auto;
   display: flex;
+  flex-wrap: wrap;
+
+  @media (max-width: 800px) {
+    max-width: 375px;
+  }
 `;
 export const ContentLeft = styled.main`
   max-width: 300px;
@@ -72,8 +92,11 @@ export const ContentLeft = styled.main`
   align-items: flex-start;
 
   @media (max-width: 800px) {
-    flex-direction: line;
+    flex-direction: row;
     position: relative;
+    max-width: 150px;
+    justify-content: space-between;
+    margin: 5px 5px;
   }
 `;
 export const ContentRight = styled.main`

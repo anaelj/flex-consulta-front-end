@@ -71,6 +71,13 @@ export const Profile = styled.div`
 
   @media (max-width: 800px) {
     max-width: 375px;
+    img {
+      display: none;
+    }
+    svg {
+      margin-right: 10px;
+    }
+    margin-left: 10px;
   }
 `;
 
@@ -85,7 +92,6 @@ export const Content = styled.main`
   }
 `;
 export const ContentLeft = styled.main`
-  max-width: 300px;
   margin: 5px -50px;
   display: flex;
   flex-direction: column;
@@ -94,8 +100,8 @@ export const ContentLeft = styled.main`
   @media (max-width: 800px) {
     flex-direction: row;
     position: relative;
-    max-width: 150px;
     justify-content: space-between;
+    width: 350px;
     margin: 5px 5px;
   }
 `;

@@ -15,8 +15,11 @@ export const Container = styled.button`
   transition: background-color 0.2s;
 
   @media (max-width: 800px) {
-    max-width: 70%;
     margin-left: 10px;
+
+    span {
+      display: none;
+    }
   }
 
   &:hover {

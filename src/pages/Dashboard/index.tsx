@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiPower } from 'react-icons/fi';
+import { FiPower, FiUser, FiAlignJustify, FiServer } from 'react-icons/fi';
 
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
@@ -56,11 +56,16 @@ const Dashboard: React.FC = ({ children }) => {
       </Header>
       <Content>
         <ContentLeft>
-          <ButtonLarge onClick={() => history.push('/pesquisamotorista')}>Consulta Viagens</ButtonLarge>
-          <ButtonLarge onClick={() => history.push('/pesquisausuario')}>
-            Cadastro de Usuários
+          <ButtonLarge onClick={() => history.push('/pesquisamotorista')}>
+            <FiAlignJustify />
+            <span> Consulta Viagens</span>
           </ButtonLarge>
-            <ButtonLarge onClick={() => history.push('/pesquisatransportadora')}>
+          <ButtonLarge onClick={() => history.push('/pesquisausuario')}>
+            <FiUser size="32" />
+            <span> Cadastro de Usuários</span>
+          </ButtonLarge>
+          <ButtonLarge onClick={() => history.push('/pesquisatransportadora')}>
+            <FiServer size="32" />
             <span>Transportadoras</span>
           </ButtonLarge>
         </ContentLeft>

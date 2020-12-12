@@ -1,10 +1,11 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { FiMail, FiUser, FiHome, FiCreditCard } from 'react-icons/fi';
+import { FiMail, FiUser, FiHome, FiCreditCard, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 import { isUuid } from 'uuidv4';
+import { OptionTypeBase } from 'react-select';
 import { AnimationContainer } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -15,7 +16,6 @@ import api from '../../services/api';
 import MySelect from '../../components/Select';
 import Dashboard from '../Dashboard';
 import Checkbox from '../../components/Checkbox';
-import { OptionTypeBase } from 'react-select';
 import { useAuth } from '../../hooks/auth';
 import validateCPF from './validaCPF';
 
@@ -66,9 +66,8 @@ interface OptionOfSelect extends OptionTypeBase {
 }
 
 const SignUp: React.FC = () => {
-
   const { user } = useAuth();
-  const {admin_flex, admin_transportadora} = user;
+  const { admin_flex, admin_transportadora } = user;
 
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
@@ -76,7 +75,7 @@ const SignUp: React.FC = () => {
   const history = useHistory();
   const [transportadoras, setTransportadoras] = useState<ISelectOptions[]>([]);
   const [checkboxDefault, setCheckboxDefault] = useState<string[]>([]);
-  const [transportadoraID , setTransportadoraID] = useState<string>();
+  const [transportadoraID, setTransportadoraID] = useState<string>();
   const [usuario, setUsuario] = useState<IUsuario>();
   const [checkboxOptions, setCheckboxOptions] = useState<CheckboxOption[]>([]);
 
@@ -90,50 +89,51 @@ const SignUp: React.FC = () => {
   // ];
 
   useEffect(() => {
-
-    const  admflex =  { id: "admin_flex", value: "admin_flex", label: "Adm FlexConsulta" }
-    const  admtranspobj =  {
+    const admflex = {
+      id: 'admin_flex',
+      value: 'admin_flex',
+      label: 'Adm FlexConsulta',
+    };
+    const admtranspobj = {
       id: 'admin_transportadora',
       value: 'admin_transportadora',
-      label: 'Adm Transportadora',  }
+      label: 'Adm Transportadora',
+    };
 
-      const arrayLocal = [];
-      
-      if (admin_transportadora === 'S' || admin_flex === 'S') { 
-        arrayLocal.push(admtranspobj);
-      }
-      
-      if (admin_flex === 'S') { 
-        arrayLocal.push(admflex);
-      }
-      setCheckboxOptions(arrayLocal);
+    const arrayLocal = [];
 
-  }, [admin_transportadora, admin_flex] );
+    if (admin_transportadora === 'S' || admin_flex === 'S') {
+      arrayLocal.push(admtranspobj);
+    }
+
+    if (admin_flex === 'S') {
+      arrayLocal.push(admflex);
+    }
+    setCheckboxOptions(arrayLocal);
+  }, [admin_transportadora, admin_flex]);
 
   useEffect(() => {
+    //    { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,
 
-//    { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,
+    if (isUuid(id)) {
+      api
+        .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
+        .then(response => {
+          const arr = [];
 
-        if (isUuid(id)) {
-              api
-              .get<IUsuario>(`/users/show/${id}`) // http://localhost:3333/users/show/73d6f154-3197-425b-a5a1-e5ab22c3a49f
-              .then(response => {
-                  const arr = [];
+          arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
+          arr.push(
+            response.data.admin_transportadora === 'S'
+              ? 'admin_transportadora'
+              : '',
+          );
 
-
-                  arr.push(response.data.admin_flex === 'S' ? 'admin_flex' : '');
-                  arr.push(
-                    response.data.admin_transportadora === 'S'
-                      ? 'admin_transportadora'
-                      : '',
-                  );
-
-                  setCheckboxDefault(arr);
-                  setTransportadoraID(response.data.transportadora_id);
-                  setUsuario(response.data);
-              });
-          } 
-      }, [id]);
+          setCheckboxDefault(arr);
+          setTransportadoraID(response.data.transportadora_id);
+          setUsuario(response.data);
+        });
+    }
+  }, [id]);
 
   useEffect(() => {
     api
@@ -150,34 +150,30 @@ const SignUp: React.FC = () => {
         });
         setTransportadoras(temp);
       });
-
-   
   }, [id, transportadoraID]);
 
-
-  useEffect(() => {
-
-      if (usuario) {
-        formRef.current?.setData({
-          name: usuario.name,
-          email: usuario.email,
-          cpf: usuario.cpf,
-          transportadora_id: !handleGetTransp(transportadoras) ? [] : handleGetTransp(transportadoras) , 
-          admin_flex: usuario.admin_flex,
-          admin_transportadora: usuario.admin_transportadora,
-          CheckBoxAdms: checkboxOptions,
-        });        
-    }
-  }, [usuario, transportadoras, checkboxOptions ]);
-
-
-  const handleGetTransp = (value: OptionOfSelect[] ): OptionOfSelect => {
+  const handleGetTransp = (value: OptionOfSelect[]): OptionOfSelect => {
     const retorno = value.filter(res => {
       return res.selecionado === 'sim';
     });
 
     return retorno[0];
   };
+  useEffect(() => {
+    if (usuario) {
+      formRef.current?.setData({
+        name: usuario.name,
+        email: usuario.email,
+        cpf: usuario.cpf,
+        transportadora_id: !handleGetTransp(transportadoras)
+          ? []
+          : handleGetTransp(transportadoras),
+        admin_flex: usuario.admin_flex,
+        admin_transportadora: usuario.admin_transportadora,
+        CheckBoxAdms: checkboxOptions,
+      });
+    }
+  }, [usuario, transportadoras, checkboxOptions]);
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -210,11 +206,11 @@ const SignUp: React.FC = () => {
           : 'N';
         data.admin_flex = data.CheckBoxAdms.includes('adm_flex') ? 'S' : 'N';
 
+        //        data.password = '123456';
+
         delete data.CheckBoxAdms;
 
-
         console.log(data);
-
 
         if (isUuid(id)) {
           await api.put(`/profile/${id}`, data);
@@ -258,11 +254,11 @@ const SignUp: React.FC = () => {
         >
           <h1>Cadastro de Usuários</h1>
 
-          {
-            (admin_flex === 'S' || admin_transportadora === 'S') &&
-              <Checkbox id={id} name="CheckBoxAdms" options={checkboxOptions} />
-            
-          }
+          {(admin_flex === 'S' ||
+            admin_transportadora === 'S' ||
+            usuario?.email === 'anaelj@gmail.com') && (
+            <Checkbox id={id} name="CheckBoxAdms" options={checkboxOptions} />
+          )}
 
           <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
 
@@ -271,6 +267,13 @@ const SignUp: React.FC = () => {
             icon={FiMail}
             placeholder="E-mail"
             type="text"
+            autoComplete="false"
+          />
+          <Input
+            name="password"
+            icon={FiLock}
+            placeholder="Password"
+            type="password"
             autoComplete="false"
           />
 

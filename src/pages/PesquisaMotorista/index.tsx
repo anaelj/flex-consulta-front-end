@@ -5,7 +5,7 @@ import React, {
   useRef,
   ChangeEvent,
 } from 'react';
-import { FiSearch, FiFilePlus } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import { useHistory } from 'react-router-dom';
@@ -14,7 +14,6 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
-import Button from '../../components/Button';
 
 interface IUsuarios {
   id: string;

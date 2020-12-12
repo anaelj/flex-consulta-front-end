@@ -84,6 +84,8 @@ const Profile: React.FC = () => {
             : {}),
         };
 
+        //        console.log(formData);
+
         const response = await api.put('/profile', formData);
 
         updateUser(response.data);
@@ -100,6 +102,8 @@ const Profile: React.FC = () => {
           const errors = getValidationErrors(error);
 
           formRef.current?.setErrors(errors);
+
+          //          console.log(errors);
 
           return;
         }

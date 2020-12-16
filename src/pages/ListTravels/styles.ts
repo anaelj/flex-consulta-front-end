@@ -8,6 +8,9 @@ export const Container = styled.div`
 
 export const ListaViagens = styled.div`
   margin-left: -210px;
+  @media (max-width: 800px) {
+    margin-left: 0px;
+  }
   margin-bottom: 20px;
   font-size: 14px;
 

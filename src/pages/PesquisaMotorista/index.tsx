@@ -15,11 +15,12 @@ import Input from '../../components/Input';
 import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
 
-interface IUsuarios {
+// sobre o mdfe e o manifesto pendente, como fazer quando estiver pendente com uma transportadora e nao tiver pendente com outra transportadora e como identificar isso no sat
+
+interface IDriver {
   id: string;
   name: string;
   cpf: string;
-  avatar_url: string;
 }
 
 interface IPesquisaData {
@@ -27,45 +28,47 @@ interface IPesquisaData {
 }
 
 const PesquisaUsuario: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<IUsuarios[]>([]);
+  const [drivers, setDrivers] = useState<IDriver[]>([]);
   const formRef = useRef<FormHandles>(null);
   const [textoDigitado, setTextDigitado] = useState('');
   const history = useHistory();
+
   useEffect(() => {
-    api
-      .get<IUsuarios[]>('/users/172e5dcf-e99f-49ed-b9cb-bee53761b1da')
-      .then(response => {
-        const temp = response.data.map(usuario => {
-          return {
-            name: usuario.name,
-            id: usuario.id,
-            cpf: usuario.cpf,
-            avatar_url: usuario.avatar_url
-              ? usuario.avatar_url
-              : 'https://www.flexconsulta.com.br/static/media/sign-in-background.d20fefa2.png',
-          };
+    if (textoDigitado !== '') {
+      api
+        .get<IDriver[]>(`/drivers/${textoDigitado}/${textoDigitado}`)
+        .then(response => {
+          const temp = response.data.map(driver => {
+            return {
+              name: driver.name,
+              id: driver.id,
+              cpf: driver.cpf,
+            };
+          });
+          // filtrar aqui textoDigitado
+          setDrivers(
+            temp
+              .filter(
+                item =>
+                  item.name
+                    .toLowerCase()
+                    .includes(textoDigitado.toLowerCase()) ||
+                  (item.cpf && item.cpf.includes(textoDigitado)),
+              )
+              .sort(function (a, b) {
+                if (a.name > b.name) {
+                  return 1;
+                }
+                if (a.name < b.name) {
+                  return -1;
+                }
+                return 0;
+              }),
+          );
+          // console.log(Usuarios);
+          //        console.log(textoDigitado);
         });
-        // filtrar aqui textoDigitado
-        setUsuarios(
-          temp
-            .filter(
-              item =>
-                item.name.toLowerCase().includes(textoDigitado.toLowerCase()) ||
-                (item.cpf && item.cpf.includes(textoDigitado)),
-            )
-            .sort(function (a, b) {
-              if (a.name > b.name) {
-                return 1;
-              }
-              if (a.name < b.name) {
-                return -1;
-              }
-              return 0;
-            }),
-        );
-        // console.log(Usuarios);
-        //        console.log(textoDigitado);
-      });
+    }
   }, [textoDigitado]);
 
   const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -73,8 +76,13 @@ const PesquisaUsuario: React.FC = () => {
   }, []);
 
   const handleOpenViagens = useCallback(
-    (id_motorista: string) => {
-      history.push(`/listaviagens/${id_motorista}`);
+    //  history.push(`/listtravels/${cpfmotorista}`);
+
+    (cpfmotorista: string, drivername: string) => {
+      history.push({
+        pathname: '/listtravels',
+        state: { cpf: cpfmotorista, name: drivername },
+      });
     },
     [history],
   );
@@ -99,15 +107,15 @@ const PesquisaUsuario: React.FC = () => {
 
               <Lista>
                 <ul className="items-grid">
-                  {usuarios.map(usuario => (
+                  {drivers.map(driver => (
                     <li
-                      key={usuario.id}
-                      onClick={() => handleOpenViagens(usuario.id)}
+                      key={driver.id}
+                      onClick={() => handleOpenViagens(driver.cpf, driver.name)}
                     >
-                      <img src={usuario.avatar_url} alt="" />
+                      <img src="" alt="" />
                       <div>
-                        <span> {usuario.name} </span>
-                        <span> {usuario.cpf} </span>
+                        <span> {driver.name} </span>
+                        <span> {driver.cpf} </span>
                       </div>
                     </li>
                   ))}

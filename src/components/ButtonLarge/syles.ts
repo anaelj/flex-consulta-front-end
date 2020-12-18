@@ -13,6 +13,12 @@ export const Container = styled.button`
   margin-top: 16px;
   font-size: 24px;
   transition: background-color 0.2s;
+  text-align: left;
+
+  span {
+    vertical-align: top;
+    padding: 15px;
+  }
 
   @media (max-width: 800px) {
     margin-left: 10px;

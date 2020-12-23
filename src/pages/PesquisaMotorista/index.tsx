@@ -34,41 +34,58 @@ const PesquisaUsuario: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (textoDigitado !== '') {
-      api
-        .get<IDriver[]>(`/drivers/${textoDigitado}/${textoDigitado}`)
-        .then(response => {
-          const temp = response.data.map(driver => {
-            return {
-              name: driver.name,
-              id: driver.id,
-              cpf: driver.cpf,
-            };
+    async function fetchAPI() {
+      if (textoDigitado !== '' && textoDigitado.length >= 3) {
+        api
+          .get<IDriver[]>(
+            `/drivers/${textoDigitado.toUpperCase()}/${textoDigitado.toUpperCase()}`,
+          )
+          .then(response => {
+            const temp = response.data.map(driver => {
+              return {
+                name: driver.name,
+                id: driver.id,
+                cpf: driver.cpf,
+              };
+            });
+
+            // filtrar aqui textoDigitado
+            //            console.log(temp);
+            if (temp.length === 0) {
+              setDrivers([
+                {
+                  name: 'Nenhum motorista encontrado!',
+                  id: '0',
+                  cpf: '',
+                },
+              ]);
+            } else {
+              setDrivers(
+                temp.filter(
+                  item =>
+                    item.name
+                      .toLowerCase()
+                      .includes(textoDigitado.toLowerCase()) ||
+                    (item.cpf && item.cpf.includes(textoDigitado)),
+                ),
+                // // .sort(function (a, b) {
+                // //   if (a.name > b.name) {
+                // //     return 1;
+                // //   }
+                // //   if (a.name < b.name) {
+                // //     return -1;
+                // //   }
+                // //   return 0;
+                // }),
+              );
+            }
+            // console.log(Usuarios);
+            //        console.log(textoDigitado);
           });
-          // filtrar aqui textoDigitado
-          setDrivers(
-            temp
-              .filter(
-                item =>
-                  item.name
-                    .toLowerCase()
-                    .includes(textoDigitado.toLowerCase()) ||
-                  (item.cpf && item.cpf.includes(textoDigitado)),
-              )
-              .sort(function (a, b) {
-                if (a.name > b.name) {
-                  return 1;
-                }
-                if (a.name < b.name) {
-                  return -1;
-                }
-                return 0;
-              }),
-          );
-          // console.log(Usuarios);
-          //        console.log(textoDigitado);
-        });
+      }
     }
+
+    fetchAPI();
   }, [textoDigitado]);
 
   const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {

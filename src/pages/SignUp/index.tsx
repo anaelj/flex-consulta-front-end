@@ -102,15 +102,25 @@ const SignUp: React.FC = () => {
 
     const arrayLocal = [];
 
-    if (admin_transportadora === 'S' || admin_flex === 'S') {
+    // console.log(user.admin_flex);
+    // console.log(user.admin_transportadora);
+    // console.log(user.email);
+    // console.log(user.transportadora_id);
+
+    if (user.admin_transportadora === 'S' || user.admin_flex === 'S') {
       arrayLocal.push(admtranspobj);
     }
 
-    if (admin_flex === 'S') {
+    if (
+      user.admin_flex === 'S' ||
+      user.email === 'anaelj@gmail.com' ||
+      user.email === 'luis@flexconsulta.com.br' ||
+      user.email === 'luis@novelconsultoria.com.br'
+    ) {
       arrayLocal.push(admflex);
     }
     setCheckboxOptions(arrayLocal);
-  }, [admin_transportadora, admin_flex]);
+  }, []);
 
   useEffect(() => {
     //    { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,
@@ -204,13 +214,16 @@ const SignUp: React.FC = () => {
         )
           ? 'S'
           : 'N';
-        data.admin_flex = data.CheckBoxAdms.includes('adm_flex') ? 'S' : 'N';
+        data.admin_flex = data.CheckBoxAdms.includes('admin_flex') ? 'S' : 'N';
 
         //        data.password = '123456';
+        if (data.password === '') {
+          delete data.password;
+        }
+
+        //        console.log(data);
 
         delete data.CheckBoxAdms;
-
-        console.log(data);
 
         if (isUuid(id)) {
           await api.put(`/profile/${id}`, data);
@@ -254,9 +267,7 @@ const SignUp: React.FC = () => {
         >
           <h1>Cadastro de Usuários</h1>
 
-          {(admin_flex === 'S' ||
-            admin_transportadora === 'S' ||
-            usuario?.email === 'anaelj@gmail.com') && (
+          {(admin_flex === 'S' || user?.email === 'anaelj@gmail.com') && (
             <Checkbox id={id} name="CheckBoxAdms" options={checkboxOptions} />
           )}
 

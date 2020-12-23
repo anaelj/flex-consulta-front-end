@@ -19,6 +19,7 @@ interface ITravel {
   mercadoria: string;
   placa: string;
   data: string;
+  transportadora_id: string;
 }
 
 const ListTravels: React.FC = () => {
@@ -43,6 +44,7 @@ const ListTravels: React.FC = () => {
           mercadoria: travel.mercadoria,
           placa: travel.placa,
           data: format(parseISO(travel.data), 'dd/MM/yyyy'),
+          transportadora_id: travel.transportadora_id,
         };
       });
       setTravels(travelsFromDriver);
@@ -64,6 +66,9 @@ const ListTravels: React.FC = () => {
 
               {travels.map(travel => (
                 <div>
+                  <div>
+                    <span> Transportadora:</span> {travel.transportadora_id}
+                  </div>
                   <div>
                     <span> Data:</span> {travel.data}
                   </div>

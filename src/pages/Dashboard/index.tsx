@@ -60,7 +60,18 @@ const Dashboard: React.FC = ({ children }) => {
             <FiAlignJustify />
             <span> Consulta Viagens</span>
           </ButtonLarge>
-          <ButtonLarge onClick={() => history.push('/pesquisausuario')}>
+          <ButtonLarge
+            onClick={() => {
+              if (
+                user.admin_flex === 'N' &&
+                user.admin_transportadora === 'N'
+              ) {
+                history.push('/profile');
+              } else {
+                history.push('/pesquisausuario');
+              }
+            }}
+          >
             <FiUser size="32" />
             <span> Cadastro de Usuários</span>
           </ButtonLarge>

@@ -11,6 +11,7 @@ import getValidationErrors from '../../utils/getValidationErros';
 import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
 import { useAuth } from '../../hooks/auth';
+import Dashboard from '../Dashboard';
 
 interface ProfileFormData {
   name: string;
@@ -86,91 +87,107 @@ const Profile: React.FC = () => {
 
         //        console.log(formData);
 
-        const response = await api.put('/profile', formData);
+        const response = await api
+          .put(`/profile/${user.id}`, formData)
+          .catch(err => {
+            if (err.response) {
+              if (err.response.data.message === 'Old password does not math.') {
+                addToast({
+                  type: 'error',
+                  title: 'Erro na atualização',
+                  description: 'Senha atual incorreta!',
+                });
+              }
+            } else if (err.request) {
+              addToast({
+                type: 'error',
+                title: 'Erro na atualização',
+                description: err.response.data.message,
+              });
+            } else {
+              console.log('undfined error verify after!!!');
+            }
+          });
 
-        updateUser(response.data);
-
-        history.push('/dashboard');
-
-        addToast({
-          type: 'success',
-          title: 'Perfil atualizado!',
-          description: 'Dados atualizados com sucesso!',
-        });
+        if (response) {
+          if (response.data) {
+            addToast({
+              type: 'success',
+              title: 'Perfil atualizado!',
+              description: 'Dados atualizados com sucesso!',
+            });
+            history.push('/dashboard');
+            //            console.log(response);
+            //          updateUser(response.data);
+          }
+        }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
           formRef.current?.setErrors(errors);
-
-          //          console.log(errors);
-
-          return;
         }
-        addToast({
-          type: 'error',
-          title: 'Erro na atualização',
-          description: 'Ocorreu um erro ao atualizar o cadastro',
-        });
+        //        console.log(error);
+        //        console.log(message);
       }
     },
     [addToast, history, updateUser],
   );
   return (
-    <Container>
-      <header>
-        <div>
-          <Link to="/dashboard">
-            <FiArrowLeft />
-          </Link>
-        </div>
-      </header>
-      <Content>
-        <Form
-          ref={formRef}
-          initialData={{ name: user.name, email: user.email }}
-          onSubmit={handleSubmit}
-        >
-          <AvatarInput>
-            <img src={user.avatar_url} alt={user.name} />
-            <label htmlFor="avatar">
-              <FiCamera />
-              <input
-                type="file"
-                name="avatar"
-                id="avatar"
-                onChange={handleAvatarChange}
-              />
-            </label>
-          </AvatarInput>
-          <h1>Meu perfil</h1>
+    <Dashboard>
+      <Container>
+        <Content>
+          <Form
+            ref={formRef}
+            initialData={{ name: user.name, email: user.email }}
+            onSubmit={handleSubmit}
+          >
+            <AvatarInput>
+              <img src={user.avatar_url} alt="" />
+              <label htmlFor="avatar">
+                <FiCamera />
+                <input
+                  type="file"
+                  name="avatar"
+                  id="avatar"
+                  onChange={handleAvatarChange}
+                />
+              </label>
+            </AvatarInput>
+            <h1>Meu perfil</h1>
 
-          <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
-          <Input name="email" icon={FiMail} placeholder="E-mail" type="text" />
-          <br />
-          <Input
-            name="old_password"
-            icon={FiLock}
-            type="password"
-            placeholder="Senha atual"
-          />
-          <Input
-            name="password_confirmation"
-            icon={FiLock}
-            type="password"
-            placeholder="Nova Senha"
-          />
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="Confirmar Senha"
-          />
+            <Input name="name" icon={FiUser} placeholder="Nome" type="text" />
+            <Input
+              name="email"
+              icon={FiMail}
+              placeholder="E-mail"
+              type="text"
+            />
+            <br />
+            <Input
+              name="old_password"
+              icon={FiLock}
+              type="password"
+              placeholder="Senha atual"
+            />
+            <Input
+              name="password_confirmation"
+              icon={FiLock}
+              type="password"
+              placeholder="Nova Senha"
+            />
+            <Input
+              name="password"
+              icon={FiLock}
+              type="password"
+              placeholder="Confirmar Senha"
+            />
 
-          <Button type="submit">Salvar</Button>
-        </Form>
-      </Content>
-    </Container>
+            <Button type="submit">Salvar</Button>
+          </Form>
+        </Content>
+      </Container>
+    </Dashboard>
   );
 };
 

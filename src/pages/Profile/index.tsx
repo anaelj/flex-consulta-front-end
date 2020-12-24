@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, ChangeEvent } from 'react';
-import { FiMail, FiUser, FiLock, FiCamera, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiUser, FiLock, FiCamera } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Container, Content, AvatarInput } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -26,6 +26,7 @@ const Profile: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
   const { user, updateUser } = useAuth();
+  const { id } = user;
   const handleAvatarChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
@@ -88,7 +89,7 @@ const Profile: React.FC = () => {
         //        console.log(formData);
 
         const response = await api
-          .put(`/profile/${user.id}`, formData)
+          .put(`/profile/${id}`, formData)
           .catch(err => {
             if (err.response) {
               if (err.response.data.message === 'Old password does not math.') {
@@ -131,7 +132,7 @@ const Profile: React.FC = () => {
         //        console.log(message);
       }
     },
-    [addToast, history, updateUser],
+    [addToast, history, id],
   );
   return (
     <Dashboard>

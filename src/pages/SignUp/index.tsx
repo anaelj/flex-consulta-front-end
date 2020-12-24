@@ -67,7 +67,7 @@ interface OptionOfSelect extends OptionTypeBase {
 
 const SignUp: React.FC = () => {
   const { user } = useAuth();
-  const { admin_flex, admin_transportadora } = user;
+  const { admin_flex, admin_transportadora, email } = user;
 
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
@@ -107,20 +107,20 @@ const SignUp: React.FC = () => {
     // console.log(user.email);
     // console.log(user.transportadora_id);
 
-    if (user.admin_transportadora === 'S' || user.admin_flex === 'S') {
+    if (admin_transportadora === 'S' || admin_flex === 'S') {
       arrayLocal.push(admtranspobj);
     }
 
     if (
-      user.admin_flex === 'S' ||
-      user.email === 'anaelj@gmail.com' ||
-      user.email === 'luis@flexconsulta.com.br' ||
-      user.email === 'luis@novelconsultoria.com.br'
+      admin_flex === 'S' ||
+      email === 'anaelj@gmail.com' ||
+      email === 'luis@flexconsulta.com.br' ||
+      email === 'luis@novelconsultoria.com.br'
     ) {
       arrayLocal.push(admflex);
     }
     setCheckboxOptions(arrayLocal);
-  }, []);
+  }, [admin_flex, admin_transportadora, email]);
 
   useEffect(() => {
     //    { id: "admin_flex", value: "admflex", label: "Adm FlexConsulta" } ,

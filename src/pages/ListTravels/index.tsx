@@ -5,6 +5,7 @@ import { Container, Content, ListaViagens } from './styles';
 import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/auth';
 
 interface ILocationState {
   cpf: string;
@@ -20,6 +21,7 @@ interface ITravel {
   placa: string;
   data: string;
   transportadora_id: string;
+  transportadora: { name: string };
 }
 
 const ListTravels: React.FC = () => {
@@ -27,6 +29,7 @@ const ListTravels: React.FC = () => {
   const { state } = useLocation<ILocationState>();
   //  const { cpf } = useParams<IParams>();
   const { cpf, name } = state;
+  const { user } = useAuth();
 
   // console.log(cpf);
   // console.log(name);
@@ -45,6 +48,7 @@ const ListTravels: React.FC = () => {
           placa: travel.placa,
           data: format(parseISO(travel.data), 'dd/MM/yyyy'),
           transportadora_id: travel.transportadora_id,
+          transportadora: travel.transportadora,
         };
       });
       setTravels(travelsFromDriver);
@@ -67,7 +71,12 @@ const ListTravels: React.FC = () => {
               {travels.map(travel => (
                 <div>
                   <div>
-                    <span> Transportadora:</span> {travel.transportadora_id}
+                    <span> Transportadora:</span>
+                    {user.admin_flex === 'S' ? (
+                      <label>{travel.transportadora.name}</label>
+                    ) : (
+                      <label>{travel.transportadora_id}</label>
+                    )}
                   </div>
                   <div>
                     <span> Data:</span> {travel.data}

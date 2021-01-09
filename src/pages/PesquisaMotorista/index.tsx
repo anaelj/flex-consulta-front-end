@@ -3,7 +3,7 @@ import React, {
   useState,
   useCallback,
   useRef,
-  ChangeEvent,
+  //  ChangeEvent,
 } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Form } from '@unform/web';
@@ -14,6 +14,7 @@ import api from '../../services/api';
 import Input from '../../components/Input';
 import Dashboard from '../Dashboard';
 import { AnimationContainer } from '../SignIn/styles';
+import Button from '../../components/Button';
 
 // sobre o mdfe e o manifesto pendente, como fazer quando estiver pendente com uma transportadora e nao tiver pendente com outra transportadora e como identificar isso no sat
 
@@ -79,8 +80,6 @@ const PesquisaUsuario: React.FC = () => {
                 // }),
               );
             }
-            // console.log(Usuarios);
-            //        console.log(textoDigitado);
           });
       }
     }
@@ -88,8 +87,12 @@ const PesquisaUsuario: React.FC = () => {
     fetchAPI();
   }, [textoDigitado]);
 
-  const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setTextDigitado(event.target.value);
+  // const handlePesquisa = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+  //   setTextDigitado(event.target.value);
+  // }, []);
+
+  const teste = useCallback(() => {
+    setTextDigitado(formRef.current?.getFieldValue('name'));
   }, []);
 
   const handleOpenViagens = useCallback(
@@ -115,11 +118,12 @@ const PesquisaUsuario: React.FC = () => {
               <InputPesquisa>
                 <Input
                   name="name"
-                  icon={FiSearch}
                   placeholder="Informe nome ou CPF"
                   type="text"
-                  onChange={handlePesquisa}
                 />
+                <Button onClick={() => teste()}>
+                  <FiSearch color="#000000" size="25px" />
+                </Button>
               </InputPesquisa>
 
               <Lista>

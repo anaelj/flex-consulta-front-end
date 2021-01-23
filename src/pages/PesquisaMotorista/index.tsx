@@ -133,7 +133,10 @@ const PesquisaUsuario: React.FC = () => {
                       key={driver.id}
                       onClick={() => handleOpenViagens(driver.cpf, driver.name)}
                     >
-                      <img src="" alt="" />
+                      <img
+                        src="https://www.flexconsulta.com.br/static/media/sign-in-background.d20fefa2.png"
+                        alt=""
+                      />
                       <div>
                         <span> {driver.name} </span>
                         <span> {driver.cpf} </span>

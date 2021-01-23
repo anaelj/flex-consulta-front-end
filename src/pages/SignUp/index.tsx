@@ -236,7 +236,7 @@ const SignUp: React.FC = () => {
         addToast({
           type: 'success',
           title: 'Cadastro realizado!',
-          description: 'Você já pode fazer seu logon no FexConsulta',
+          description: 'Você já pode fazer seu logon no FlexConsulta',
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {

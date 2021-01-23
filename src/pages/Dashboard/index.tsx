@@ -39,7 +39,7 @@ const Dashboard: React.FC = ({ children }) => {
     <Container>
       <Header>
         <HeaderContent>
-          <img src={logoImg} alt="FexConsulta" />
+          <img src={logoImg} alt="FlexConsulta" />
           <Profile>
             <img src={user.avatar_url} alt="" />
             <div>

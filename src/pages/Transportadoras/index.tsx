@@ -183,7 +183,7 @@ const Transportadora: React.FC = () => {
                   <span>Inativo</span>
                 </DivRadio>
               ) : (
-                ''
+                handleStatusChange('A')
               )}
 
               {/* {admin_flex === 'S' && (

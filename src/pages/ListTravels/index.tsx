@@ -93,9 +93,9 @@ const ListTravels: React.FC = () => {
                   <div>
                     <span>Mercadoria:</span> {travel.mercadoria}
                   </div>
-                  <div>
+                  {/* <div>
                     <span>MDF-e Pendente:</span> - <span>Manifesto:</span>-
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </ListaViagens>

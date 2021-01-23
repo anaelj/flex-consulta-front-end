@@ -17,6 +17,20 @@ export const Content = styled.div`
   max-width: 700px;
 `;
 
+export const DivRadio = styled.div`
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  place-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  span {
+    margin-right: 20px;
+    margin-left: 5px;
+  }
+`;
+
 const appearFromRight = keyframes`
   from {
     opacity: 0;

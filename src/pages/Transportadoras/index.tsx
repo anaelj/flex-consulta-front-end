@@ -133,54 +133,58 @@ const Transportadora: React.FC = () => {
             <Form ref={formRef} onSubmit={handleSubmit}>
               <h1>Transportadora</h1>
 
-              <DivRadio>
-                {statusHere === 'A' ? (
-                  <input
-                    id="status"
-                    type="radio"
-                    value="A"
-                    name="status"
-                    checked
-                    onClick={() => {
-                      handleStatusChange('A');
-                    }}
-                  />
-                ) : (
-                  <input
-                    id="status"
-                    type="radio"
-                    value="A"
-                    name="status"
-                    onClick={() => {
-                      handleStatusChange('A');
-                    }}
-                  />
-                )}
-                <span>Ativo</span>
-                {statusHere === 'I' ? (
-                  <input
-                    id="status"
-                    type="radio"
-                    value="I"
-                    name="status"
-                    checked
-                    onClick={() => {
-                      handleStatusChange('I');
-                    }}
-                  />
-                ) : (
-                  <input
-                    id="status"
-                    type="radio"
-                    value="I"
-                    name="status"
-                    onClick={() => {
-                      handleStatusChange('I');
-                    }}
-                  />
-                )}
-                <span>Inativo</span>
-              </DivRadio>
+              {admin_flex === 'S' ? (
+                <DivRadio>
+                  {statusHere === 'A' ? (
+                    <input
+                      id="status"
+                      type="radio"
+                      value="A"
+                      name="status"
+                      checked
+                      onClick={() => {
+                        handleStatusChange('A');
+                      }}
+                    />
+                  ) : (
+                    <input
+                      id="status"
+                      type="radio"
+                      value="A"
+                      name="status"
+                      onClick={() => {
+                        handleStatusChange('A');
+                      }}
+                    />
+                  )}
+                  <span>Ativo</span>
+                  {statusHere === 'I' ? (
+                    <input
+                      id="status"
+                      type="radio"
+                      value="I"
+                      name="status"
+                      checked
+                      onClick={() => {
+                        handleStatusChange('I');
+                      }}
+                    />
+                  ) : (
+                    <input
+                      id="status"
+                      type="radio"
+                      value="I"
+                      name="status"
+                      onClick={() => {
+                        handleStatusChange('I');
+                      }}
+                    />
+                  )}
+                  <span>Inativo</span>
+                </DivRadio>
+              ) : (
+                ''
+              )}
 
               {/* {admin_flex === 'S' && (
 

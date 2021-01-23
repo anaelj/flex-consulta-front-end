@@ -143,18 +143,6 @@ const Profile: React.FC = () => {
             initialData={{ name: user.name, email: user.email }}
             onSubmit={handleSubmit}
           >
-            <AvatarInput>
-              <img src={user.avatar_url} alt="" />
-              <label htmlFor="avatar">
-                <FiCamera />
-                <input
-                  type="file"
-                  name="avatar"
-                  id="avatar"
-                  onChange={handleAvatarChange}
-                />
-              </label>
-            </AvatarInput>
             <h1>Meu perfil</h1>
 
             <Input name="name" icon={FiUser} placeholder="Nome" type="text" />

@@ -41,7 +41,6 @@ const Dashboard: React.FC = ({ children }) => {
         <HeaderContent>
           <img src={logoImg} alt="FlexConsulta" />
           <Profile>
-            <img src={user.avatar_url} alt="" />
             <div>
               <span>Bem-vindo,</span>
               <Link to="/profile">

@@ -145,19 +145,6 @@ const Transportadora: React.FC = () => {
         <Content>
           <AnimationContainer>
             <Form ref={formRef} onSubmit={handleSubmit}>
-              <AvatarInput>
-                <img src={transportadora?.avatar_url} alt="" />
-                <label htmlFor="avatar">
-                  <FiCamera color="#00000" />
-                  <input
-                    type="file"
-                    name="avatar"
-                    id="avatar"
-                    onChange={handleAvatarChange}
-                  />
-                </label>
-              </AvatarInput>
-
               <h1>Transportadora</h1>
 
               <Input name="name" icon={FiUser} placeholder="Nome" type="text" />

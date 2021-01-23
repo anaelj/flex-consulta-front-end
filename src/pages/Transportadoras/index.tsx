@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useRef,
-  useEffect,
-  ChangeEvent,
-  useState,
-} from 'react';
-import { FiMail, FiUser, FiPhone, FiCamera } from 'react-icons/fi';
+import React, { useCallback, useRef, useEffect } from 'react';
+import { FiMail, FiUser, FiPhone } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -19,7 +13,6 @@ import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
 import { AnimationContainer } from '../SignIn/styles';
 import Dashboard from '../Dashboard';
-import { AvatarInput } from '../Profile/styles';
 
 interface ITransportadoraFormData {
   name: string;
@@ -38,7 +31,6 @@ const Transportadora: React.FC = () => {
   const { id } = useParams();
   const formRef = useRef<FormHandles>(null);
 
-  const [transportadora, setTransportadora] = useState<ITransportadora>();
   // const [avatar_url, setAvatarUrl] = useState();
 
   useEffect(() => {
@@ -53,10 +45,6 @@ const Transportadora: React.FC = () => {
             telefone: response.data.telefone,
             avatar_url: response.data.avatar_url,
           });
-          setTransportadora({
-            name: response.data.name,
-            avatar_url: response.data.avatar_url,
-          });
         });
     }
     //    console.log(id);
@@ -64,27 +52,6 @@ const Transportadora: React.FC = () => {
 
   const { addToast } = useToast();
   const history = useHistory();
-
-  const handleAvatarChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const data = new FormData();
-
-        data.append('avatar', e.target.files[0]);
-        ///
-        api.patch(`/transportadoras/avatar/${id}`, data).then(response => {
-          addToast({
-            type: 'success',
-            title: 'Avatar atualizado!',
-          });
-
-          setTransportadora(response.data);
-        });
-        // console.log(e.target.files[0]);
-      }
-    },
-    [addToast, id],
-  );
 
   const handleSubmit = useCallback(
     async (data: ITransportadoraFormData) => {

@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, ChangeEvent } from 'react';
-import { FiMail, FiUser, FiLock, FiCamera } from 'react-icons/fi';
+import React, { useCallback, useRef } from 'react';
+import { FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-import { Container, Content, AvatarInput } from './styles';
+import { Container, Content } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
@@ -25,28 +25,9 @@ const Profile: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
-  const { user, updateUser } = useAuth();
+  const { user } = useAuth();
   const { id } = user;
-  const handleAvatarChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const data = new FormData();
 
-        data.append('avatar', e.target.files[0]);
-
-        api.patch('/users/avatar', data).then(response => {
-          updateUser(response.data);
-          addToast({
-            type: 'success',
-            title: 'Avatar atualizado!',
-          });
-        });
-
-        // console.log(e.target.files[0]);
-      }
-    },
-    [addToast, updateUser],
-  );
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
       try {
